@@ -1,5 +1,10 @@
 <resources>
     <string name="app_name">COVID-19 Visualizer</string>
-    <string name="tab_text_1">Tab 1</string>
-    <string name="tab_text_2">Tab 2</string>
+    <string name="tab_text_1">Map Screen</string>
+    <string name="tab_text_2">Info</string>
+
+    <!--ADDED BY HARRY-->
+    <string name="title_activity_maps">Map</string>
+    <!--ADDED BY HARRY-->
+
 </resources>

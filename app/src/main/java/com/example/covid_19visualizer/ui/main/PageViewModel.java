@@ -12,7 +12,20 @@ public class PageViewModel extends ViewModel {
     private LiveData<String> mText = Transformations.map(mIndex, new Function<Integer, String>() {
         @Override
         public String apply(Integer input) {
-            return "Hello world from section: " + input;
+            // return "Hello world from section: " + input;
+
+            // *************** ADDED BY HARRY ***************
+            switch(input) {
+                case 1: // Map
+                    return "Map will go here";
+
+                case 2:
+                    return "General info/headlines will go here";
+
+                default:
+                    return "";
+            }
+            // *************** ADDED BY HARRY ***************
         }
     });
 
