@@ -17,10 +17,10 @@ public class PageViewModel extends ViewModel {
             // *************** ADDED BY HARRY ***************
             switch(input) {
                 case 1: // Map
-                    return "Map will go here";
+                    return "Map will go here!";
 
                 case 2:
-                    return "General info/headlines will go here";
+                    return "General info/headlines will go here!";
 
                 default:
                     return "";
