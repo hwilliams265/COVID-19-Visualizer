@@ -22,6 +22,8 @@ public class PageViewModel extends ViewModel {
                 case 2:
                     return "General info/headlines will go here!";
 
+                case 3:
+                    return "News go here"; //added by Federico
                 default:
                     return "";
             }
