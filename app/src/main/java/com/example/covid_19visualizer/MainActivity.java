@@ -6,24 +6,28 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 
 import com.example.covid_19visualizer.ui.main.SectionsPagerAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends FragmentActivity {
+
+    static SectionsPagerAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+
         ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(sectionsPagerAdapter);
+//        SectionsPagerAdapter adapter = new SectionsPagerAdapter(this,
+//                                                                getSupportFragmentManager());
+        adapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
+
+        viewPager.setAdapter(adapter);
+
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
