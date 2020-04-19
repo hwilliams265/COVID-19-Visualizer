@@ -3,6 +3,7 @@ package com.example.covid_19visualizer.ui.main;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,86 +26,112 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Created by: Harry
+ *
+ * This class contains everything needed for the maps_fragment.xml page.
+ * A lot of the code here was taken from various stackoverflow threads, so I can't claim to know
+ * exactly how it all works.
+ */
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
-    /**
-     * Meant to be a way to display the maps fragment. See
-     * https://developer.android.com/training/animation/screen-slide#java for more details.
-     */
 
-    private GoogleMap mMap;
+    private GoogleMap googleMap;
 
-    private GoogleApiClient mGoogleApiClient;
+    private GoogleApiClient googleApiClient;
 
-    private Context mContext;
+    // See SectionsPagerAdapter for info about the Context class
+    private Context context;
 
-    @NotNull
-    public static MapsFragment newInstance() {
-        Bundle bundle = new Bundle();
-        MapsFragment fragment = new MapsFragment();
-        fragment.setArguments(bundle);
-        return fragment;
-    }
+    // See InfoFragment for more info about the newInstance() method
+//    @NotNull
+//    public static MapsFragment newInstance() {
+//        Bundle bundle = new Bundle();
+//        MapsFragment fragment = new MapsFragment();
+//        fragment.setArguments(bundle);
+//        return fragment;
+//    }
 
+    // onAttach() is automatically run before onCreate()
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NotNull Context context) {
         super.onAttach(context);
-        this.mContext = context;
+        this.context = context;
     }
 
-    public View onCreateView(LayoutInflater inflater,
+    // onCreateView() is automatically run after onCreate() when the fragment is called to view.
+    // It returns a View object that displays the maps interface.
+    public View onCreateView(@NotNull LayoutInflater inflater,
                              ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.maps_fragment, container, false);
-        return rootView;
+        return inflater.inflate(R.layout.maps_fragment, container, false);
     }
 
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    // onViewCreated() is automatically run immediately after onCreateView(), prior to any changes
+    // to the view being reflected on the user's end.
+    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
+
+        Log.d("CREATION", "OnViewCreated() is being executed");
+
         super.onViewCreated(view, savedInstanceState);
+        // Instantiates the mapFragment object and links it to the map xml object
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+        // raise an exception if mapFragment is null (makes bug checking easier)
         assert mapFragment != null;
+        // Set a callback object to trigger when the map is ready to use
         mapFragment.getMapAsync(this);
     }
 
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
 
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder(mContext)
+        Log.d("CREATION", "OnMapReady() is being executed");
+
+        this.googleMap = googleMap;
+
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(context)
                     .addConnectionCallbacks(this)
                     .addOnConnectionFailedListener(this)
                     .addApi(LocationServices.API)
                     .build();
-            mGoogleApiClient.connect();
+            googleApiClient.connect();
         }
     }
 
+
+    @Override
     public void onStart() {
-        if (mGoogleApiClient != null) {
-            mGoogleApiClient.connect();
+        if (googleApiClient != null) {
+            googleApiClient.connect();
         }
         super.onStart();
     }
 
+    // onConnected() is executed when googleApiClient.connect() is run.
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        if (ActivityCompat.checkSelfPermission(mContext,
+
+        Log.d("CREATED", "onConnected() being executed");
+
+        // If the permissions needed to run the app are granted, ...
+        if (ActivityCompat.checkSelfPermission(context,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(mContext,
+                ActivityCompat.checkSelfPermission(context,
                         android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
                         PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
 
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            Log.d("CREATION", "maps permissions passed!");
+
+            // Add a marker in Sydney and move the camera
+            LatLng sydney = new LatLng(-34, 151);
+            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        }
     }
 
     @Override
