@@ -26,11 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!--    ADDED BY HARRY -->
         <activity android:name=".ui.main.MapsFragment" />
         <activity android:name=".ui.main.NewsFragment" />
         <activity android:name=".ui.main.InfoFragment" />
 
-        <!--    ADDED BY HARRY -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
