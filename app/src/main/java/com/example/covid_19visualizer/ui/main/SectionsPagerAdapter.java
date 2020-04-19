@@ -2,45 +2,46 @@ package com.example.covid_19visualizer.ui.main;
 
 import android.content.Context;
 
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.covid_19visualizer.R;
 
-/**
- * A [FragmentPagerAdapter] that returns a fragment corresponding to
- * one of the sections/tabs/pages.
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-    @StringRes
-    private static final int[] TAB_TITLES = new int[]{R.string.tab_text_1, R.string.tab_text_2, R.string.tab_text_3};
+    private static final int[] TAB_TITLES = new int[] {R.string.tab_text_1,
+                                                       R.string.tab_text_2,
+                                                       R.string.tab_text_3};
     private final Context mContext;
+
+    public List<String> fragmentClassNames = new ArrayList<String>();
 
     public SectionsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
+        fragmentClassNames.add(0, MapsFragment.class.getName());
+        fragmentClassNames.add(1, InfoFragment.class.getName());
+        fragmentClassNames.add(2, NewsFragment.class.getName());
+
+//        fragmentClassNames.add(0, ".ui.main.MapsFragment");
+//        fragmentClassNames.add(1, ".ui.main.InfoFragment");
+//        fragmentClassNames.add(2, ".ui.main.NewsFragment");
     }
 
-    @Override
     public Fragment getItem(int position) {
-        // getItem is called to instantiate the fragment for the given page.
-        // Return a PlaceholderFragment (defined as a static inner class below).
-        return PlaceholderFragment.newInstance(position + 1);
+        return Fragment.instantiate(mContext, fragmentClassNames.get(position));
     }
 
-    @Nullable
-    @Override
     public CharSequence getPageTitle(int position) {
         return mContext.getResources().getString(TAB_TITLES[position]);
     }
 
-    @Override
     public int getCount() {
-        // Show 2 total pages.
-        return 3; //edited by Federico: Show 3 pages
+        return 3;
     }
 }
