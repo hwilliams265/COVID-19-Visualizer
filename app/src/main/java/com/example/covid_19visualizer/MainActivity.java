@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.example.covid_19visualizer.ui.main.SectionsPagerAdapter;
 
+
 /**
  * File created by: System
  *
