@@ -6,6 +6,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
@@ -71,6 +72,7 @@ public class MainActivity extends FragmentActivity {
 
         // Initialize a CovidData object and download the data if necessary
         CovidData covidData = new CovidData(this);
+        covidData.deleteData();
         int downloadResult;
         if (!covidData.isDataDownloaded()) {
             downloadResult = covidData.downloadData();
