@@ -65,5 +65,11 @@ public class MainActivity extends FragmentActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        // Initialize a CovidData object and download the data if necessary
+        CovidData covidData = new CovidData(this);
+        if (!covidData.isDataDownloaded()) {
+            covidData.downloadData();
+        }
     }
 }

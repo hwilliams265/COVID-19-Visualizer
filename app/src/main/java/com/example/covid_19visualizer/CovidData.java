@@ -3,6 +3,9 @@ package com.example.covid_19visualizer;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -34,6 +37,8 @@ public class CovidData {
 
     private File localData; // Where the data is stored after it's downloaded
 
+    private File dataDirectory; // the folder containing the data
+
     // true if the data is downloaded (including if it isn't the most recent data), false if
     // otherwise
     private boolean isDataDownloaded;
@@ -41,16 +46,25 @@ public class CovidData {
     private Context context;
 
     // The default constructor. It grabs the current date and the github link
-    public CovidData() throws MalformedURLException {
+    public CovidData(@NotNull Context context) {
+        this.context = context;
+
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         date = new Date();
         date.setDate(date.getDate() - 1);
 
-        onlineDataPath = new URL("https://raw.githubusercontent" +
-                ".com/CSSEGISandData/COVID-19/master/csse_covid_19_data" +
-                "/csse_covid_19_daily_reports/" + dateFormat.format(date) + ".csv");
+        try {
+            onlineDataPath = new URL("https://raw.githubusercontent" +
+                    ".com/CSSEGISandData/COVID-19/master/csse_covid_19_data" +
+                    "/csse_covid_19_daily_reports/" + dateFormat.format(date) + ".csv");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
 
-        localData = new File(context.getFilesDir(), dateFormat.format(date) + ".csv");
+        // Create a folder called "data" (or assign it to dataDirectory if it already exists)
+        // and put the new file inside of it.
+        dataDirectory = context.getDir("data", Context.MODE_PRIVATE);
+        localData = new File(dataDirectory, dateFormat.format(date) + ".csv");
         isDataDownloaded = localData.exists();
     }
 
@@ -59,7 +73,7 @@ public class CovidData {
     //      0 -> data downloaded successfully
     //      1 -> data could not be downloaded, no old data to fall back on
     //      2 -> data could not be downloaded but we do have old data to fall back on
-    public int downloadData() throws IOException {
+    public int downloadData() {
         // Check if the user is connected to internet
         ConnectivityManager cm =
                 (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -78,13 +92,17 @@ public class CovidData {
         }
 
         // Download the csv 1 line at a time
-        BufferedWriter writer = new BufferedWriter(new FileWriter(localData));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            writer.write(line);
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(localData));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                writer.write(line);
+            }
+            reader.close();
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        reader.close();
-        writer.close();
 
         isDataDownloaded = true;
 
@@ -103,7 +121,7 @@ public class CovidData {
     // If we can't connect to github, this function determines what to do.
     private int findLocalData() {
         // check if there is a file from a previous day
-        File[] oldFiles = context.getFilesDir().listFiles();
+        File[] oldFiles = dataDirectory.listFiles();
         assert oldFiles != null;
 
         if (oldFiles.length == 0) {
@@ -117,8 +135,14 @@ public class CovidData {
             isDataDownloaded = true;
             String name = localData.getName();
             // remove the ".csv" extension
-            date = new Date(name.substring(0, name.length() - 4));
+            name = name.substring(0, name.length() - 4);
+            Log.d("VALUE_TEST", name);
+            date = new Date(name);
             return 2;
         }
+    }
+
+    public boolean isDataDownloaded() {
+        return isDataDownloaded;
     }
 }
