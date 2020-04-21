@@ -1,11 +1,14 @@
 package com.example.covid_19visualizer;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -65,10 +68,25 @@ public class CovidData {
 
         // Create a folder called "data" (or assign it to dataDirectory if it already exists)
         // and put the new file inside of it.
-        dataDirectory = context.getDir("data", Context.MODE_PRIVATE);
+        dataDirectory = context.getDir("covid_data", Context.MODE_PRIVATE);
         localData = new File(dataDirectory, dateFormat.format(date) + ".csv");
         isDataDownloaded = localData.exists();
     }
+
+    /******************************************************/
+    // This function is only used for debugging purposes so that we can simulate the downloading
+    // process multiple times
+    public void deleteData() {
+        File[] localDataFiles = dataDirectory.listFiles();
+        assert localDataFiles != null;
+        for (File localDataFile : localDataFiles) {
+            if(!localDataFile.isDirectory()) {
+                localDataFile.delete();
+            }
+        }
+        isDataDownloaded = false;
+    }
+    /******************************************************/
 
     // Download the data from github.
     // exit status...
@@ -76,7 +94,9 @@ public class CovidData {
     //      1 -> data could not be downloaded, no old data to fall back on
     //      2 -> data could not be downloaded but we do have old data to fall back on
     public int downloadData() {
-        DownloadDataTask downloadDataTask = new DownloadDataTask();
+        DownloadDataTask downloadDataTask =
+                new DownloadDataTask(((Activity) context).findViewById(android.R.id.content));
+
         downloadDataTask.execute();
         return downloadDataTask.doInBackgroundReturn;
     }
@@ -89,8 +109,28 @@ public class CovidData {
     // Downloading data must be done in the background, hence the need for this sub class.
     private class DownloadDataTask extends AsyncTask<URL, Integer, Integer> {
 
+
+        private View rootView; // This allows us to have a snackbar display on the main screen
+
+        // The message we display to the user to show that the data is being downloaded.
+        private Snackbar snackbar;
+
         // The value returned by doInBackground, which I use in downloadData() for error checking
         private int doInBackgroundReturn;
+
+        // constructor that assigns the rootView member, allowing us to create a snackbar in
+        // onPostExecute
+        public DownloadDataTask(View rootView) {
+            this.rootView = rootView;
+        }
+
+        // Automatically called immediately before doInBackground()
+        @Override
+        protected void onPreExecute() {
+            snackbar = Snackbar.make(rootView, "Fetching the latest data...",
+                    Snackbar.LENGTH_INDEFINITE);
+            snackbar.show();
+        }
 
         // called by the execute() method
         @Override
@@ -143,6 +183,7 @@ public class CovidData {
         @Override
         protected void onPostExecute(Integer result) {
             doInBackgroundReturn = result;
+            snackbar.dismiss();
         }
 
         // If we can't connect to github, this function determines what to do.
