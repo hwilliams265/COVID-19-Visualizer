@@ -1,8 +1,10 @@
 package com.example.covid_19visualizer;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
@@ -74,75 +76,97 @@ public class CovidData {
     //      1 -> data could not be downloaded, no old data to fall back on
     //      2 -> data could not be downloaded but we do have old data to fall back on
     public int downloadData() {
-        // Check if the user is connected to internet
-        ConnectivityManager cm =
-                (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        assert cm != null;
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-
-        BufferedReader reader;
-        if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
-            try {
-                reader = new BufferedReader(new InputStreamReader(onlineDataPath.openStream()));
-            } catch (Exception e) {
-                return findLocalData();
-            }
-        } else {
-            return findLocalData();
-        }
-
-        // Download the csv 1 line at a time
-        try {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(localData));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                writer.write(line);
-            }
-            reader.close();
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        isDataDownloaded = true;
-
-        // Now that we've downloaded our data, we need to delete any other data files that are
-        // currently stored to avoid wasting memory.
-        File[] localDataFiles = context.getFilesDir().listFiles();
-        assert localDataFiles != null;
-        for (File localDataFile : localDataFiles) {
-            if (!localDataFile.getName().equals(localData.getName())) {
-                localDataFile.delete();
-            }
-        }
-        return 0;
+        DownloadDataTask downloadDataTask = new DownloadDataTask();
+        downloadDataTask.execute();
+        return downloadDataTask.doInBackgroundReturn;
     }
 
-    // If we can't connect to github, this function determines what to do.
-    private int findLocalData() {
-        // check if there is a file from a previous day
-        File[] oldFiles = dataDirectory.listFiles();
-        assert oldFiles != null;
-
-        if (oldFiles.length == 0) {
-            // Well, it looks like we don't have any data to fall back on. exit with
-            // status 1.
-            return 1;
-
-        } else {
-            // If there is an old file, set it to the current file and exit with status 2.
-            localData = oldFiles[0];
-            isDataDownloaded = true;
-            String name = localData.getName();
-            // remove the ".csv" extension
-            name = name.substring(0, name.length() - 4);
-            Log.d("VALUE_TEST", name);
-            date = new Date(name);
-            return 2;
-        }
-    }
 
     public boolean isDataDownloaded() {
         return isDataDownloaded;
+    }
+
+    // Downloading data must be done in the background, hence the need for this sub class.
+    private class DownloadDataTask extends AsyncTask<URL, Integer, Integer> {
+
+        // The value returned by doInBackground, which I use in downloadData() for error checking
+        private int doInBackgroundReturn;
+
+        // called by the execute() method
+        @Override
+        protected Integer doInBackground(URL... urls) {
+            // Check if the user is connected to internet
+            ConnectivityManager cm =
+                    (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            assert cm != null;
+            NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+
+            BufferedReader reader;
+            if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
+                try {
+                    reader = new BufferedReader(new InputStreamReader(onlineDataPath.openStream()));
+                } catch (Exception e) {
+                    return findLocalData();
+                }
+            } else {
+                return findLocalData();
+            }
+
+            // Download the csv 1 line at a time
+            try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(localData));
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    writer.write(line);
+                }
+                reader.close();
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            isDataDownloaded = true;
+
+            // Now that we've downloaded our data, we need to delete any other data files that are
+            // currently stored to avoid wasting memory.
+            File[] localDataFiles = context.getFilesDir().listFiles();
+            assert localDataFiles != null;
+            for (File localDataFile : localDataFiles) {
+                if (!localDataFile.getName().equals(localData.getName())) {
+                    localDataFile.delete();
+                }
+            }
+            return 0;
+        }
+
+        // called immediately after doInBackground(). result is the output of that method.
+        @Override
+        protected void onPostExecute(Integer result) {
+            doInBackgroundReturn = result;
+        }
+
+        // If we can't connect to github, this function determines what to do.
+        private int findLocalData() {
+            // check if there is a file from a previous day
+            File[] oldFiles = dataDirectory.listFiles();
+            assert oldFiles != null;
+
+            if (oldFiles.length == 0) {
+                // Well, it looks like we don't have any data to fall back on. exit with
+                // status 1.
+                return 1;
+
+            } else {
+                // If there is an old file, set it to the current file and exit with status 2.
+                localData = oldFiles[0];
+                isDataDownloaded = true;
+                String name = localData.getName();
+                // remove the ".csv" extension
+                name = name.substring(0, name.length() - 4);
+                Log.d("VALUE_TEST", name);
+                date = new Date(name);
+                return 2;
+            }
+        }
     }
 }

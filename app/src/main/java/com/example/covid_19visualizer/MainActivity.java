@@ -8,6 +8,8 @@ import com.google.android.material.tabs.TabLayout;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
+
+import android.util.Log;
 import android.view.View;
 
 import com.example.covid_19visualizer.ui.main.SectionsPagerAdapter;
@@ -69,8 +71,10 @@ public class MainActivity extends FragmentActivity {
 
         // Initialize a CovidData object and download the data if necessary
         CovidData covidData = new CovidData(this);
+        int downloadResult;
         if (!covidData.isDataDownloaded()) {
-            covidData.downloadData();
+            downloadResult = covidData.downloadData();
+            Log.d("MY_RESULT", String.valueOf(downloadResult));
         }
     }
 }
