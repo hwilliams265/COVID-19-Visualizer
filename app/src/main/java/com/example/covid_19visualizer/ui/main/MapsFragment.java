@@ -173,6 +173,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         float scalingFactor;
         switch (stat) {
             case "Confirmed":
+                // The header for the dataframe is:
+                // (0) Lat; (1) Long_; (2) Confirmed; (3) Deaths; (4) Recovered; (5) Active;
                 scalingFactor = 1000;
                 break;
             case "Deaths":

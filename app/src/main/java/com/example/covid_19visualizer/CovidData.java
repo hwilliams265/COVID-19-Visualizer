@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -22,9 +23,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-
-import joinery.DataFrame;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by: Harry
@@ -46,7 +49,10 @@ public class CovidData {
 
     private File dataDirectory; // the folder containing the data
 
-    private DataFrame data; // The latitude/longitude data
+    // The actual data that we're plotting, organized into a map of Lists. The keys are the
+    // latitude, longitude, and a few basic stats about the COVID infection rate. I've removed
+    // location name data, but we can add that back in if necessary.
+    private Map<String, List<Object>> data;
 
     // true if the data is downloaded (including if it isn't the most recent data), false if
     // otherwise
@@ -75,8 +81,7 @@ public class CovidData {
         dataDirectory = context.getDir("covid_data", Context.MODE_PRIVATE);
         localData = new File(dataDirectory, dateFormat.format(date) + ".csv");
         isDataDownloaded = localData.exists();
-
-        data = null;
+        data = null; // this gets assigned by initializeData().
     }
 
     /******************************************************/
@@ -113,27 +118,73 @@ public class CovidData {
         return isDataDownloaded;
     }
 
-    public DataFrame getData() throws NoSuchFieldException {
-        if (data != null) {
-            return data;
-        } else {
-            throw new NoSuchFieldException("For some reason, the data was never saved as a " +
-                    "dataframe.");
-        }
-    }
+    // Create usable data from the downloaded csv
+    private void initializeData() {
 
-    // Before we do anything with the downloaded data, we need to format it. This method is run
-    // right after the data is finished downloading by DownloadDataTask.onPostExecute().
-    private void formatData() {
-        DataFrame<Object> data = new DataFrame<>();
+        Map<String, List<Object>> data = new HashMap<>();
+
+        String[] categories = new String[]{"Lat", "Long", "Confirmed", "Deaths", "Recovered",
+                "Active"};
+        for (String category : categories) {
+            data.put(category, new ArrayList<Object>());
+        }
+
         try {
-            data = DataFrame.readCsv(localData.getAbsolutePath());
+            BufferedReader reader = new BufferedReader(new FileReader(localData));
+            String[] rowData;
+            String row;
+            reader.readLine(); // we discard the first row (since its just headers)
+
+            while ((row = reader.readLine()) != null) {
+                // That weird string is regex for: "match a comma only if it isn't followed by a
+                // space. This way, commas that are naturally part of the text are not considered
+                // to separate values.
+                rowData = row.split("(?!, ),");
+
+                // columns 5-10 have the data we need
+                int i = 5;
+                for (String category : categories) {
+                    data.get(category).add(rowData[i]);
+                    i++;
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        this.data =
-                data.retain("Lat", "Long_", "Confirmed", "Deaths", "Recovered", "Active").dropna();
+        // Convert Lat and Long to float, and everything else to int.
+        float f;
+        int in;
+        List<Integer> rowsToDelete = new ArrayList<>();
+        for (String category : categories) {
+            for (int i = 0; i < data.get("Lat").size(); i++) {
+                if (category.equals("Lat") || category.equals("Long")) {
+                    // There are a couple points that don't have a location value. We want to
+                    // keep track of them and then delete them once we're finished looping though.
+                    // We also want to avoid converting them, since it will crash the program if
+                    // we do.
+                    if (data.get(category).get(i).equals("")) {
+                        rowsToDelete.add(i);
+                    } else {
+                        f = Float.parseFloat((String) data.get(category).get(i));
+                        data.get(category).set(i, f);
+                    }
+                } else {
+                    in = Integer.parseInt((String) data.get(category).get(i));
+                    data.get(category).set(i, in);
+                }
+            }
+        }
+
+        if (rowsToDelete != null) {
+            for (int i = rowsToDelete.size() - 1; i > 0; i--) {
+                for (String category : categories) {
+                    data.get(category).remove(rowsToDelete.get(i));
+                }
+            }
+        }
+
+        this.data = data;
     }
 
     // Downloading data must be done in the background, hence the need for this sub class.
@@ -215,9 +266,9 @@ public class CovidData {
         protected void onPostExecute(Integer result) {
             doInBackgroundReturn = result;
 
-            if (doInBackgroundReturn == 0) {
-                // There's no need to format the data if it didn't download (codes 1 or 2)
-                formatData();
+            // A code of 0 or 2 means we have data, 1 means we have none.
+            if (doInBackgroundReturn == 0 || doInBackgroundReturn == 2) {
+                initializeData();
             }
 
             snackbar.dismiss();
