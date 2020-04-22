@@ -24,6 +24,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import joinery.DataFrame;
+
 /**
  * Created by: Harry
  * <p>
@@ -106,6 +108,19 @@ public class CovidData {
         return isDataDownloaded;
     }
 
+    // Before we do anything with the downloaded data, we need to format it. This method is run
+    // right after the data is finished downloading by DownloadDataTask.onPostExecute().
+    private void formatData() {
+        DataFrame<Object> data = new DataFrame<>();
+        try {
+            data = DataFrame.readCsv(localData.getAbsolutePath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        data.drop("FIPS", "Last_Update", "Combined_Key");
+    }
+
     // Downloading data must be done in the background, hence the need for this sub class.
     private class DownloadDataTask extends AsyncTask<URL, Integer, Integer> {
 
@@ -158,6 +173,7 @@ public class CovidData {
                 String line;
                 while ((line = reader.readLine()) != null) {
                     writer.write(line);
+                    writer.newLine();
                 }
                 reader.close();
                 writer.close();
@@ -183,6 +199,12 @@ public class CovidData {
         @Override
         protected void onPostExecute(Integer result) {
             doInBackgroundReturn = result;
+
+            if(doInBackgroundReturn == 0) {
+                // There's no need to format the data if it didn't download (codes 1 or 2)
+                formatData();
+            }
+
             snackbar.dismiss();
         }
 

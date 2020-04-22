@@ -1,24 +1,21 @@
 package com.example.covid_19visualizer;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 
+import androidx.fragment.app.FragmentActivity;
+import androidx.viewpager.widget.ViewPager;
+
+import com.example.covid_19visualizer.ui.main.SectionsPagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.FragmentActivity;
-import androidx.viewpager.widget.ViewPager;
-
-import android.util.Log;
-import android.view.View;
-
-import com.example.covid_19visualizer.ui.main.SectionsPagerAdapter;
-
 
 /**
  * File created by: System
- *
+ * <p>
  * This class contains everything needed for the activity_main.xml page. Because it is the
  * designated as the main class, it (specifically onCreate()) will automatically run when the app
  * starts.
@@ -42,7 +39,7 @@ public class MainActivity extends FragmentActivity {
         // the viewPager which fragment corresponds to which tab (eg. the INFO tab corresponds to
         // the InfoFragment class)
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(this,
-                                                                getSupportFragmentManager());
+                getSupportFragmentManager());
 
         // Assign the adapter to the viewPager
         viewPager.setAdapter(adapter);
@@ -64,7 +61,7 @@ public class MainActivity extends FragmentActivity {
             @Override
             public void onClick(View view) {
                 // Snackbar is Google's class that creates reminder popups when an action is done.
-                Snackbar.make(view,"This could be a link to a coronavirus symptom checker or" +
+                Snackbar.make(view, "This could be a link to a coronavirus symptom checker or" +
                         " something, idk", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
