@@ -1,7 +1,6 @@
 package com.example.covid_19visualizer;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 
 import androidx.fragment.app.FragmentActivity;
@@ -66,14 +65,5 @@ public class MainActivity extends FragmentActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        // Initialize a CovidData object and download the data if necessary
-        CovidData covidData = new CovidData(this);
-        covidData.deleteData();
-        int downloadResult;
-        if (!covidData.isDataDownloaded()) {
-            downloadResult = covidData.downloadData();
-            Log.d("MY_RESULT", String.valueOf(downloadResult));
-        }
     }
 }

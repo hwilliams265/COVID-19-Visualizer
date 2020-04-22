@@ -2,6 +2,8 @@
   <dictionary name="hwill">
     <words>
       <w>csse</w>
+      <w>dataframe</w>
+      <w>fips</w>
       <w>snackbar</w>
     </words>
   </dictionary>

@@ -46,6 +46,8 @@ public class CovidData {
 
     private File dataDirectory; // the folder containing the data
 
+    private DataFrame data; // The latitude/longitude data
+
     // true if the data is downloaded (including if it isn't the most recent data), false if
     // otherwise
     private boolean isDataDownloaded;
@@ -73,6 +75,8 @@ public class CovidData {
         dataDirectory = context.getDir("covid_data", Context.MODE_PRIVATE);
         localData = new File(dataDirectory, dateFormat.format(date) + ".csv");
         isDataDownloaded = localData.exists();
+
+        data = null;
     }
 
     /******************************************************/
@@ -82,12 +86,13 @@ public class CovidData {
         File[] localDataFiles = dataDirectory.listFiles();
         assert localDataFiles != null;
         for (File localDataFile : localDataFiles) {
-            if(!localDataFile.isDirectory()) {
+            if (!localDataFile.isDirectory()) {
                 localDataFile.delete();
             }
         }
         isDataDownloaded = false;
     }
+
     /******************************************************/
 
     // Download the data from github.
@@ -108,6 +113,15 @@ public class CovidData {
         return isDataDownloaded;
     }
 
+    public DataFrame getData() throws NoSuchFieldException {
+        if (data != null) {
+            return data;
+        } else {
+            throw new NoSuchFieldException("For some reason, the data was never saved as a " +
+                    "dataframe.");
+        }
+    }
+
     // Before we do anything with the downloaded data, we need to format it. This method is run
     // right after the data is finished downloading by DownloadDataTask.onPostExecute().
     private void formatData() {
@@ -118,7 +132,8 @@ public class CovidData {
             e.printStackTrace();
         }
 
-        data.drop("FIPS", "Last_Update", "Combined_Key");
+        this.data =
+                data.retain("Lat", "Long_", "Confirmed", "Deaths", "Recovered", "Active").dropna();
     }
 
     // Downloading data must be done in the background, hence the need for this sub class.
@@ -200,7 +215,7 @@ public class CovidData {
         protected void onPostExecute(Integer result) {
             doInBackgroundReturn = result;
 
-            if(doInBackgroundReturn == 0) {
+            if (doInBackgroundReturn == 0) {
                 // There's no need to format the data if it didn't download (codes 1 or 2)
                 formatData();
             }

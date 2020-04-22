@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.example.covid_19visualizer.CovidData;
 import com.example.covid_19visualizer.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -21,6 +22,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -28,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by: Harry
- *
+ * <p>
  * This class contains everything needed for the maps_fragment.xml page.
  * A lot of the code here was taken from various stackoverflow threads, so I can't claim to know
  * exactly how it all works.
@@ -36,6 +39,8 @@ import org.jetbrains.annotations.NotNull;
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
+
+    private CovidData covidData;
 
     private GoogleMap googleMap;
 
@@ -128,16 +133,68 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             Log.d("CREATION", "maps permissions passed!");
 
             // Add a marker in Sydney and move the camera
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            LatLng boston = new LatLng(43, -71);
+            googleMap.addMarker(new MarkerOptions().position(boston).title("Marker in Boston"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(boston));
+
+            initializeCovidData();
+
+            try {
+                plotCases("Confirmed");
+            } catch (NoSuchFieldException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
-    public void onConnectionSuspended(int i) {}
+    public void onConnectionSuspended(int i) {
+    }
 
     @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {}
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
+
+    // Initialize a CovidData object and download the data if necessary
+    private void initializeCovidData() {
+        covidData = new CovidData(context);
+        covidData.deleteData();
+        int downloadResult;
+        if (!covidData.isDataDownloaded()) {
+            downloadResult = covidData.downloadData();
+            Log.d("MY_RESULT", String.valueOf(downloadResult));
+        }
+    }
+
+
+    // create circles on the map correlated to the number of cases of the category stat.
+    // Stat can be "Confirmed" "Deaths" "Recovered" or "Active"
+    private void plotCases(@NotNull String stat) throws NoSuchFieldException {
+        float scalingFactor;
+        switch (stat) {
+            case "Confirmed":
+                scalingFactor = 1000;
+                break;
+            case "Deaths":
+                scalingFactor = 1000;
+                break;
+            case "Recovered":
+                scalingFactor = 1000;
+                break;
+            case "Active":
+                scalingFactor = 1000;
+                break;
+            default:
+                throw new NoSuchFieldException("\"" + stat + "\" is not a valid stat. " +
+                        "Acceptable stats are: \"Confirmed\" \"Deaths\" \"Recovered\" or " +
+                        "\"Active\".");
+        }
+
+        CircleOptions circleOptions = new CircleOptions()
+                .center(new LatLng(43, -71))
+                .radius(1000);
+        Circle circle = googleMap.addCircle(circleOptions);
+        Log.d("MY_CIRCLE", "Drawing circle...");
+    }
 }
 
