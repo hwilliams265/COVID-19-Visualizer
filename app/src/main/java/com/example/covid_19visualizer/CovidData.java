@@ -100,7 +100,8 @@ public class CovidData {
 
     /******************************************************/
 
-    // Download the data from github.
+    // Download the data from github. In addition to downloading the data to a csv file, this
+    // program also causes initializeData() to be executed, which initializes the data member.
     // exit status...
     //      0 -> data downloaded successfully
     //      1 -> data could not be downloaded, no old data to fall back on
@@ -119,7 +120,7 @@ public class CovidData {
     }
 
     // Create usable data from the downloaded csv
-    private void initializeData() {
+    public void initializeData() {
 
         Map<String, List<Object>> data = new HashMap<>();
 
@@ -153,7 +154,7 @@ public class CovidData {
         }
 
         // Convert Lat and Long to float, and everything else to int.
-        float f;
+        double d;
         int in;
         List<Integer> rowsToDelete = new ArrayList<>();
         for (String category : categories) {
@@ -166,8 +167,8 @@ public class CovidData {
                     if (data.get(category).get(i).equals("")) {
                         rowsToDelete.add(i);
                     } else {
-                        f = Float.parseFloat((String) data.get(category).get(i));
-                        data.get(category).set(i, f);
+                        d = Double.parseDouble((String) data.get(category).get(i));
+                        data.get(category).set(i, d);
                     }
                 } else {
                     in = Integer.parseInt((String) data.get(category).get(i));
@@ -176,15 +177,19 @@ public class CovidData {
             }
         }
 
-        if (rowsToDelete != null) {
+        if (rowsToDelete.size() != 0) {
             for (int i = rowsToDelete.size() - 1; i > 0; i--) {
                 for (String category : categories) {
-                    data.get(category).remove(rowsToDelete.get(i));
+                    data.get(category).remove(rowsToDelete.get(i).intValue());
                 }
             }
         }
 
         this.data = data;
+    }
+
+    public Map<String, List<Object>> getData() {
+        return data;
     }
 
     // Downloading data must be done in the background, hence the need for this sub class.
@@ -268,7 +273,9 @@ public class CovidData {
 
             // A code of 0 or 2 means we have data, 1 means we have none.
             if (doInBackgroundReturn == 0 || doInBackgroundReturn == 2) {
-                initializeData();
+//                Log.d("MY_METHOD", "initializing the data...");
+//                initializeData();
+//                Log.d("MY_METHOD", "Finished initializing the data.");
             }
 
             snackbar.dismiss();
