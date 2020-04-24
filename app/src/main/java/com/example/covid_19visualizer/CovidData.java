@@ -256,7 +256,7 @@ public class CovidData {
 
             // Now that we've downloaded our data, we need to delete any other data files that are
             // currently stored to avoid wasting memory.
-            File[] localDataFiles = context.getFilesDir().listFiles();
+            File[] localDataFiles = dataDirectory.listFiles();
             assert localDataFiles != null;
             for (File localDataFile : localDataFiles) {
                 if (!localDataFile.getName().equals(localData.getName())) {
@@ -272,11 +272,11 @@ public class CovidData {
             doInBackgroundReturn = result;
 
             // A code of 0 or 2 means we have data, 1 means we have none.
-            if (doInBackgroundReturn == 0 || doInBackgroundReturn == 2) {
+//            if (doInBackgroundReturn == 0 || doInBackgroundReturn == 2) {
 //                Log.d("MY_METHOD", "initializing the data...");
 //                initializeData();
 //                Log.d("MY_METHOD", "Finished initializing the data.");
-            }
+//            }
 
             snackbar.dismiss();
         }
