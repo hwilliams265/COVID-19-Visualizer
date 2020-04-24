@@ -190,8 +190,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                 // The header for the dataframe is:
                 // (0) Lat; (1) Long_; (2) Confirmed; (3) Deaths; (4) Recovered; (5) Active;
                 scalingFactor = 1000;
-                fillColor = Color.parseColor(String.valueOf(R.color.confirmed_fill));
-                edgeColor = Color.parseColor(String.valueOf(R.color.confirmed_edge));
+//                fillColor = Color.parseColor(String.valueOf(R.color.confirmed_fill));
+//                edgeColor = Color.parseColor(String.valueOf(R.color.confirmed_edge));
+                 fillColor = Color.parseColor("#4080ff99");
+                 edgeColor = Color.parseColor("#ff006c15");
                 break;
             case "Deaths":
                 scalingFactor = 10000;
