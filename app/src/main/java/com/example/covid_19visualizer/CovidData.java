@@ -124,9 +124,12 @@ public class CovidData {
 
         Map<String, List<Object>> data = new HashMap<>();
 
-        String[] categories = new String[]{"Lat", "Long", "Confirmed", "Deaths", "Recovered",
-                "Active"};
-        for (String category : categories) {
+//        String[] categories = new String[]{"Lat", "Long", "Confirmed", "Deaths", "Recovered",
+//                "Active"};
+
+        String[] CATEGORIES = new String[]{"County", "Province_State", "Country_Region",
+                "Last_Update", "Lat", "Long", "Confirmed", "Deaths", "Recovered", "Active"};
+        for (String category : CATEGORIES) {
             data.put(category, new ArrayList<Object>());
         }
 
@@ -142,9 +145,9 @@ public class CovidData {
                 // to separate values.
                 rowData = row.split("(?!, ),");
 
-                // columns 5-10 have the data we need
-                int i = 5;
-                for (String category : categories) {
+//                 columns 1-10 have the data we need
+                int i = 1;
+                for (String category : CATEGORIES) {
                     data.get(category).add(rowData[i]);
                     i++;
                 }
@@ -157,7 +160,7 @@ public class CovidData {
         double d;
         int in;
         List<Integer> rowsToDelete = new ArrayList<>();
-        for (String category : categories) {
+        for (String category : CATEGORIES) {
             for (int i = 0; i < data.get("Lat").size(); i++) {
                 if (category.equals("Lat") || category.equals("Long")) {
                     // There are a couple points that don't have a location value. We want to
@@ -170,7 +173,10 @@ public class CovidData {
                         d = Double.parseDouble((String) data.get(category).get(i));
                         data.get(category).set(i, d);
                     }
-                } else {
+                } else if (!category.equals("Country_Region") &&
+                        !category.equals("Last_Update") &&
+                        !category.equals("Province_State") &&
+                        !category.equals("County")) {
                     in = Integer.parseInt((String) data.get(category).get(i));
                     data.get(category).set(i, in);
                 }
@@ -179,11 +185,108 @@ public class CovidData {
 
         if (rowsToDelete.size() != 0) {
             for (int i = rowsToDelete.size() - 1; i > 0; i--) {
-                for (String category : categories) {
+                for (String category : CATEGORIES) {
                     data.get(category).remove(rowsToDelete.get(i).intValue());
                 }
             }
         }
+
+        // Now we want to convert the county-level data to state-level data for the US. Yes I
+        // know this looks super ugly but its the most efficient way to do it AFAIK
+        String[] STATE_NAMES = {"Alabama", "Alaska", "Arizona", "Arkansas", "California",
+                "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
+                "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine",
+                "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri",
+                "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico",
+                "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon",
+                "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee",
+                "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin"
+                , "Wyoming"};
+        double[] STATE_LATS = {32.6010112, 61.3025006, 34.1682185, 34.7519275, 37.2718745,
+                38.9979339, 41.5187835, 39.145251, 27.9757279, 32.6781248, 20.46, 45.4945756,
+                39.739318, 39.7662195, 41.9383166, 38.4987789, 37.8222935, 30.9733766, 45.2185133
+                , 38.8063524, 42.0629398, 44.9435598, 46.4418595, 32.5851062, 38.3046615,
+                46.6797995, 41.5008195, 38.502032, 44.0012306, 40.1430058, 34.1662325, 40.7056258
+                , 35.2145629, 47.4678819, 40.1903624, 35.3097654, 44.1419049, 40.9945928,
+                41.5827282, 33.62505, 44.2126995, 35.830521, 31.1693363, 39.4997605, 43.8717545,
+                38.0033855, 38.8993487, 38.9201705, 44.7862968, 43.000325};
+        double[] STATE_LONGS = {-86.6807365, -158.7750198, -111.930907, -92.1313784, -119.2704153
+                , -105.550567, -72.757507, -75.4189206, -83.8330166, -83.2229757, -157.505,
+                -114.1424303, -89.504139, -86.441277, -93.389798, -98.3200779, -85.7682399,
+                -91.4299097, -69.0148656, -77.2684162, -71.718067, -86.4158049, -93.3655146,
+                -89.8772196, -92.437099, -110.044783, -99.680902, -117.0230604, -71.5799231,
+                -74.7311156, -106.0260685, -73.97968, -79.8912675, -100.3022655, -82.6692525,
+                -98.7165585, -120.5380993, -77.6046984, -71.5064508, -80.9470381, -100.2471641,
+                -85.9785989, -100.0768425, -111.547028, -72.4477828, -79.4587861, -77.0145665,
+                -80.1816905, -89.8267049, -107.5545669};
+        Map<String, List<Object>> stateData = new HashMap<>();
+        for (String category : CATEGORIES) {
+            stateData.put(category, new ArrayList<Object>());
+        }
+        for (String stateName : STATE_NAMES) {
+            stateData.get("Country_Region").add(stateName);
+        }
+        for (double lat : STATE_LATS) {
+            stateData.get("Lat").add(lat);
+        }
+        for (double long_ : STATE_LONGS) {
+            stateData.get("Long").add(long_);
+        }
+
+        // For each state, we want a sum of their COVID stats.
+        Map<String, Integer> stateTally = new HashMap<>();
+        for (String stateName : STATE_NAMES) { // cycle through each state
+            stateTally.put("Confirmed", 0);
+            stateTally.put("Deaths", 0);
+            stateTally.put("Recovered", 0);
+            stateTally.put("Active", 0);
+            // cycle through all the rows of the csv
+            for (int i = 0; i < data.get("Lat").size(); i++) {
+                // if the state name matches...
+                if (data.get("Province_State").get(i).equals(stateName)) {
+                    // ... then add that county's stat totals to the overall tally
+                    for (String categoryKey : new String[]{"Confirmed", "Deaths", "Recovered",
+                            "Active"}) {
+                        stateTally.put(categoryKey,
+                                stateTally.get(categoryKey) + (Integer) data.get(categoryKey).get(i));
+                    }
+                }
+            }
+            // Once all the states are tallied up, transfer the stateTally to the correct entry
+            // in the stateData hash map.
+            for (String categoryKey : new String[]{"Confirmed", "Deaths", "Recovered", "Active"}) {
+                stateData.get(categoryKey).add(stateTally.get(categoryKey));
+            }
+        }
+
+        // Now that we've extracted all of the state data, we can go ahead and delete the county
+        // data. Non-county data will have an empty string instead of an entry in "County", so we
+        // can use that to our advantage.
+        List<Integer> moreRowsToDelete = new ArrayList<>();
+        for (int i = 0; i < data.get("County").size(); i++) {
+            if (!data.get("County").get(i).equals("")) {
+                moreRowsToDelete.add(i);
+            }
+        }
+        for (int i = moreRowsToDelete.size() - 1; i > 0; i--) {
+            for (String category : CATEGORIES) {
+                data.get(category).remove(moreRowsToDelete.get(i).intValue());
+            }
+        }
+
+        // Finally, we need to combine data and stateData.
+        for(String category : new String[] {"County", "Province_State", "Last_Update"}) {
+            // We can go ahead and drop the unneeded categories
+            data.remove(category);
+            stateData.remove(category);
+        }
+
+        for (String category : data.keySet()) {
+            for (int i = 0; i < stateData.get("Country_Region").size(); i++) {
+                data.get(category).add(stateData.get(category).get(i));
+            }
+        }
+
 
         this.data = data;
     }
