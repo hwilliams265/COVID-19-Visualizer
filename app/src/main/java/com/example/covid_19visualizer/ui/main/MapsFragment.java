@@ -24,9 +24,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.jetbrains.annotations.NotNull;
@@ -92,6 +96,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         assert mapFragment != null;
         // Set a callback object to trigger when the map is ready to use
         mapFragment.getMapAsync(this);
+
+        if (googleApiClient != null) {
+            googleApiClient.connect();
+        }
     }
 
 
@@ -139,13 +147,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
             initializeCovidData();
             try {
-                plotCases("Confirmed");
-            } catch (NoSuchFieldException e) {
-                e.printStackTrace();
-            }
-
-            try {
-                plotCases("Confirmed");
+                plotCases("Active");
             } catch (NoSuchFieldException e) {
                 e.printStackTrace();
             }
@@ -183,26 +185,34 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     // Stat can be "Confirmed" "Deaths" "Recovered" or "Active"
     private void plotCases(@NotNull String stat) throws NoSuchFieldException {
         int scalingFactor;
-        @ColorInt int fillColor = 0;
-        @ColorInt int edgeColor = 0;
+        String fillColor;
+        String edgeColor;
         switch (stat) {
             case "Confirmed":
                 // The header for the dataframe is:
                 // (0) Lat; (1) Long_; (2) Confirmed; (3) Deaths; (4) Recovered; (5) Active;
-                scalingFactor = 1000;
 //                fillColor = Color.parseColor(String.valueOf(R.color.confirmed_fill));
 //                edgeColor = Color.parseColor(String.valueOf(R.color.confirmed_edge));
-                 fillColor = Color.parseColor("#4080ff99");
-                 edgeColor = Color.parseColor("#ff006c15");
+//                 fillColor = "#80ff99";
+//                 edgeColor = "#006c15";
+                fillColor = "#4080ff99";
+                edgeColor = "#ff00320a";
+                scalingFactor = 1000;
                 break;
             case "Deaths":
-                scalingFactor = 10000;
+                fillColor = "#40ff9d9d";
+                edgeColor = "#ff760000";
+                scalingFactor = 1000;
                 break;
             case "Recovered":
-                scalingFactor = 10000;
+                fillColor = "#40add8e6";
+                edgeColor = "#ff3a9dbd";
+                scalingFactor = 1000;
                 break;
             case "Active":
-                scalingFactor = 10000;
+                fillColor = "#40ffffb9";
+                edgeColor = "#ff929200";
+                scalingFactor = 1000;
                 break;
             default:
                 throw new NoSuchFieldException("\"" + stat + "\" is not a valid stat. " +
@@ -210,23 +220,28 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                         "\"Active\".");
         }
 
+//        LatLngBounds bounds;
+//        GroundOverlay circleOverlay;
+//        BitmapDescriptor imageDescriptor =
+//                BitmapDescriptorFactory.fromResource(R.drawable.circle_overlay);
+
+
+
         Map<String, List<Object>> data = covidData.getData();
         for (int i = 0; i < data.get(stat).size(); i++) {
+//            bounds = new LatLngBounds(LatLng())
+//            circleOverlay = googleMap.addGroundOverlay()
+
+
             CircleOptions circleOptions = new CircleOptions()
                     .center(new LatLng((double) data.get("Lat").get(i),
                             (double) data.get("Long").get(i)))
                     .radius(Math.sqrt((double) ((Integer) data.get(stat).get(i)).intValue()) * scalingFactor)
-                    .fillColor(fillColor)
-                    .strokeColor(edgeColor)
+                    .fillColor(Color.parseColor(fillColor))
+                    .strokeColor(Color.parseColor(edgeColor))
                     .strokeWidth(2);
             Circle circle = googleMap.addCircle(circleOptions);
         }
-
-//        CircleOptions circleOptions = new CircleOptions()
-//                .center(new LatLng(43, -71))
-//                .radius(1000);
-//        Circle circle = googleMap.addCircle(circleOptions);
-//        Log.d("MY_CIRCLE", "Drawing circle...");
     }
 }
 
