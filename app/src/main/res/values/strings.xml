@@ -6,11 +6,9 @@
     x
 
     <!--ADDED BY HARRY-->
-    <string name="title_activity_maps">Map</string>
     <!--ADDED BY HARRY-->
 
     //Added by Jennifer
-    <string name="tab_text_4">COVID-19 Screening Questionnaire</string>
     <string name="deaths">Deaths</string>
     <string name="confirmed">Confirmed</string>
     <string name="active">Active</string>
