@@ -45,7 +45,7 @@ public class CovidData {
 
     private Date date; // The date of the most recent csv data
 
-    private File localData; // Where the data is stored after it's downloaded
+    public File localData; // Where the data is stored after it's downloaded
 
     private File dataDirectory; // the folder containing the data
 
@@ -286,7 +286,6 @@ public class CovidData {
                 data.get(category).add(stateData.get(category).get(i));
             }
         }
-
 
         this.data = data;
     }
