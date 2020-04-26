@@ -6,9 +6,6 @@
     //added by Federico for page 3
     x
 
-    <!--ADDED BY HARRY-->
-    <!--ADDED BY HARRY-->
-
     //Added by Jennifer
     <string name="deaths">Deaths</string>
     <string name="confirmed">Confirmed</string>
@@ -18,4 +15,6 @@
         active cases: %3d \nTotal recoveries: %4d \nTotal deaths: %5d</string>
     <string name="popup_display_note">Note: Some countries do not report recoveries.</string>
     <string name="popup_display_exit">Tap anywhere to go back</string>
+    <string name="popup_display_credits">Data gratefully provided by Johns Hopkins Center
+        for Systems Science and Engineering.</string>
 </resources>
