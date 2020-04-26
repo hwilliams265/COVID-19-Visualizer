@@ -2,6 +2,7 @@ package com.example.covid_19visualizer.ui.main;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -22,6 +23,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.covid_19visualizer.CovidData;
 import com.example.covid_19visualizer.R;
+import com.example.covid_19visualizer.RegionInfoPopup;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
@@ -52,21 +54,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+    public CovidData covidData;
     private FloatingActionButton fabExpand;
     private FloatingActionButton fabDeaths;
     private FloatingActionButton fabRecovered;
     private FloatingActionButton fabActive;
     private FloatingActionButton fabConfirmed;
-
     private TextView deaths;
     private TextView recovered;
     private TextView active;
     private TextView confirmed;
-
-    private CovidData covidData;
-
     private GoogleMap googleMap;
-
     private GoogleApiClient googleApiClient;
 
     // See SectionsPagerAdapter for info about the Context class
@@ -100,7 +98,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     }
 
     // onViewCreated() is automatically run immediately after onCreateView(), prior to any changes
-    // to the view being reflected on the user's end.
+    // to the view being reflected on the user's end. We use it to get a map fragment, which we
+    // will later instantiate in onMapReady().
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         // Instantiates the mapFragment object and links it to the map xml object
@@ -187,8 +186,22 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             }
         });
 
+        // Sometimes, the view will get re-created without the app restarting. When this happens,
+        // we want to reset the displayed circles (the button states get reset automatically).
+        if (plottedCircles != null) {
+            for (String category : new String[]{"Deaths", "Recovered", "Active"}) {
+                if (plottedCircles.get(category).get(0).isVisible()) {
+                    toggleCircles(category);
+                }
+            }
+            if (!plottedCircles.get("Confirmed").get(0).isVisible()) {
+                toggleCircles("Confirmed");
+            }
+        }
     }
 
+    // Triggered when one of the four mini buttons is pressed. Toggles the color from light to
+    // dark, or dark to light.
     private void toggleFabBackground(FloatingActionButton fab, int darkColor, int darkIcon,
                                      int lightIcon) {
         if (fab.getBackgroundTintList().equals(ColorStateList.valueOf(0xffffffff))) {
@@ -200,6 +213,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
+    // Instantiate the GoogleMap and the GoogleApiClient
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
@@ -217,7 +231,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-
     @Override
     public void onStart() {
         if (googleApiClient != null) {
@@ -226,14 +239,17 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         super.onStart();
     }
 
-    // onConnected() is executed when googleApiClient.connect() is run.
+    // onConnected() is executed when googleApiClient.connect() is run. We use it to load the
+    // .csv containing the COVID-19 data into a hash map, and to draw all of the circles on the
+    // map (but make them all invisible). This slows the start-up time slightly, but it makes the
+    // app run much smoother once its started up.
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
         Log.d("CREATED", "onConnected() being executed");
 
-        // If the permissions needed to run the app are granted, ...
+        // If the permissions needed to run the app are granted...
         if (ActivityCompat.checkSelfPermission(context,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED &&
@@ -252,14 +268,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         }
     }
 
-    @Override
-    public void onConnectionSuspended(int i) {
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-    }
-
     // Initialize a CovidData object and download the data if necessary
     private void initializeCovidData() {
         covidData = new CovidData(context);
@@ -274,13 +282,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         Log.d("MY_METHOD", "Finished initializing the data.");
     }
 
+    // Create objects for all of the circles, but don't draw them yet. Must be run before
+    // toggleCircles().
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     private void initializePlottedCircles() throws IllegalStateException {
         Snackbar snackbar = Snackbar.make(((Activity) context).findViewById(android.R.id.content),
                 "Initializing the map...", Snackbar.LENGTH_INDEFINITE);
         snackbar.show();
 
-        Map<String, List<Object>> data = covidData.getData();
+        final Map<String, List<Object>> data = covidData.getData();
         int scalingFactor = 1000;
         plottedCircles = new ArrayMap<>();
         for (String category : new String[]{"Confirmed", "Active", "Recovered", "Deaths"}) {
@@ -318,16 +328,47 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                         .strokeWidth(2)
                         .visible(false);
                 plottedCircles.get(category).add(googleMap.addCircle(circleOptions));
+                plottedCircles.get(category).get(i).setTag(i);
+                plottedCircles.get(category).get(i)
+                        .setZIndex(-((Integer) data.get("Confirmed").get(i)).floatValue());
             }
         }
+
+        googleMap.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
+            @Override
+            public void onCircleClick(Circle circle) {
+                if (circle.isVisible()) {
+                    Intent intent = new Intent(MapsFragment.this.getActivity(),
+                            RegionInfoPopup.class);
+                    int index = (int) circle.getTag();
+                    intent.putExtra("REGION", (String) data.get("Country_Region").get(index));
+                    intent.putExtra("CONFIRMED", (int) data.get("Confirmed").get(index));
+                    intent.putExtra("ACTIVE", (int) data.get("Active").get(index));
+                    intent.putExtra("RECOVERED", (int) data.get("Recovered").get(index));
+                    intent.putExtra("DEATHS", (int) data.get("Deaths").get(index));
+
+                    startActivity(intent);
+                }
+            }
+        });
+
         snackbar.dismiss();
     }
 
+    // Draw the (already-instantiated) circles of the inputted category.
     private void toggleCircles(String category) {
         for (Circle circle : plottedCircles.get(category)) {
             circle.setVisible(!circle.isVisible());
+            circle.setClickable(!circle.isClickable());
         }
     }
 
-}
+    @Override
+    public void onConnectionSuspended(int i) {
+    }
 
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+    }
+
+}

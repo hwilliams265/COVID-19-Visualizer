@@ -31,6 +31,7 @@
         <activity android:name=".ui.main.MapsFragment" />
         <activity android:name=".ui.main.NewsFragment" />
         <activity android:name=".ui.main.InfoFragment" />
+        <activity android:name=".RegionInfoPopup" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

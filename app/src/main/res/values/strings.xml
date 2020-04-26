@@ -2,7 +2,8 @@
     <string name="app_name">COVID-19 Visualizer</string>
     <string name="tab_text_1">Map Screen</string>
     <string name="tab_text_2">Info</string>
-    <string name="tab_text_3">News</string> //added by Federico for page 3
+    <string name="tab_text_3">News</string>
+    //added by Federico for page 3
     x
 
     <!--ADDED BY HARRY-->
@@ -13,4 +14,8 @@
     <string name="confirmed">Confirmed</string>
     <string name="active">Active</string>
     <string name="recovered">Recovered</string>
+    <string name="popup_display_text">Country or State: %1s \nTotal confirmed cases: %2d \nTotal
+        active cases: %3d \nTotal recoveries: %4d \nTotal deaths: %5d</string>
+    <string name="popup_display_note">Note: Some countries do not report recoveries.</string>
+    <string name="popup_display_exit">Tap anywhere to go back</string>
 </resources>
