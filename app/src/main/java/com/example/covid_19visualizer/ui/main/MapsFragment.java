@@ -272,14 +272,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     private void initializeCovidData() {
         covidData = new CovidData(context);
 //        covidData.deleteData();
-        int downloadResult;
+        int downloadResult = 0;
         if (!covidData.isDataDownloaded()) {
             downloadResult = covidData.downloadData();
-            Log.d("MY_RESULT", String.valueOf(downloadResult));
+            while (!covidData.isDataDownloaded()) ;
         }
-        Log.d("MY_METHOD", "initializing the data...");
-        covidData.initializeData();
-        Log.d("MY_METHOD", "Finished initializing the data.");
+        Snackbar snackbar = Snackbar.make(((Activity) context).findViewById(android.R.id.content),
+                "", Snackbar.LENGTH_LONG);
+        switch (downloadResult) {
+            case 2: // Download failed, but we have old data in the system memory
+                snackbar.setText("Warning: Could not fetch new data. using data from" +
+                        covidData.localData.getName() + ".").show();
+            case 0: // Download succeeded!
+                covidData.initializeData();
+                break;
+            case 1: // Download failed with no backup
+                snackbar.setText("Error: Could not fetch new data.").show();
+        }
+
     }
 
     // Create objects for all of the circles, but don't draw them yet. Must be run before
