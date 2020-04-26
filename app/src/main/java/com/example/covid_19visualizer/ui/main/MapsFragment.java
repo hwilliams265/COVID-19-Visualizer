@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -339,6 +340,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                         .visible(false);
                 plottedCircles.get(category).add(googleMap.addCircle(circleOptions));
                 plottedCircles.get(category).get(i).setTag(i);
+                // The z-index determines the order of the circles on the map. If a circle
+                // overlaps another circle, the circle with the higher z-index will be clickable.
+                // We always want smaller circles to have a higher z-index than larger circles so
+                // that even completely overlapped circles will be clickable. 
                 plottedCircles.get(category).get(i)
                         .setZIndex(-((Integer) data.get("Confirmed").get(i)).floatValue());
             }
