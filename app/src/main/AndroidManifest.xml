@@ -6,10 +6,14 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!--    ADDED BY HARRY -->
 
+    <!--    ADDED BY FEDERICO: INTERNET PERMISSION FOR NEWS FEED -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -23,15 +27,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <!--    ADDED BY HARRY -->
+        <activity android:name=".ui.main.MapsFragment" />
+        <activity android:name=".ui.main.NewsFragment" />
+        <activity android:name=".ui.main.InfoFragment" />
+        <activity android:name=".RegionInfoPopup" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps"/>
         <!--    ADDED BY HARRY -->
 
     </application>
