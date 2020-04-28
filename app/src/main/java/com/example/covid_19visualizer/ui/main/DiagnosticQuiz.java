@@ -45,23 +45,10 @@ public class DiagnosticQuiz extends AppCompatActivity {
 
         updateQuestion(r.nextInt (mQuestionsLength));
 
-        answer1.setOnClickListener(); {
+        answer1.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view); {
-                        if(answer1.getText() == mAnswer) {
-                            mScore++;
-                            score.setText("Score: " + mScore);
-                            updateQuestion(r.nextInt(mQuestionsLength));
-                        } else {
-                            gameOver();
-                        }
-                    }
-        };
-
-        answer2.setOnClickListener(); {
-            @Override
-            public void onClick(View view); {
-                if(answer2.getText() == mAnswer) {
+            public void onClick(View v) {
+                if (answer1.getText() == mAnswer) {
                     mScore++;
                     score.setText("Score: " + mScore);
                     updateQuestion(r.nextInt(mQuestionsLength));
@@ -69,12 +56,12 @@ public class DiagnosticQuiz extends AppCompatActivity {
                     gameOver();
                 }
             }
-        };
+        });
 
-        answer3.setOnClickListener(); {
+        answer2.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view); {
-                if(answer3.getText() == mAnswer) {
+            public void onClick(View v) {
+                if (answer2.getText() == mAnswer) {
                     mScore++;
                     score.setText("Score: " + mScore);
                     updateQuestion(r.nextInt(mQuestionsLength));
@@ -82,12 +69,12 @@ public class DiagnosticQuiz extends AppCompatActivity {
                     gameOver();
                 }
             }
-        };
+        });
 
-        answer4.setOnClickListener(); {
+        answer3.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view); {
-                if(answer4.getText() == mAnswer) {
+            public void onClick(View v) {
+                if (answer3.getText() == mAnswer) {
                     mScore++;
                     score.setText("Score: " + mScore);
                     updateQuestion(r.nextInt(mQuestionsLength));
@@ -95,7 +82,20 @@ public class DiagnosticQuiz extends AppCompatActivity {
                     gameOver();
                 }
             }
-        };
+        });
+
+        answer4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (answer4.getText() == mAnswer) {
+                    mScore++;
+                    score.setText("Score: " + mScore);
+                    updateQuestion(r.nextInt(mQuestionsLength));
+                } else {
+                    gameOver();
+                }
+            }
+        });
     }
 
     private void updateQuestion(int num) {
