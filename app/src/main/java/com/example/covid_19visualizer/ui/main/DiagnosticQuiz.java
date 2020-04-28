@@ -2,123 +2,133 @@ package com.example.covid_19visualizer.ui.main;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.covid_19visualizer.R;
 
-import org.w3c.dom.Text;
-
 import java.util.Random;
 
-class DiagnosticQuiz {
-    private final Object Bundle;
+public class DiagnosticQuiz extends AppCompatActivity {
+    Button answer1, answer2, answer3, answer4;
 
-    <override> DiagnosticQuiz(Object bundle) {
-       Bundle = bundle;
+    TextView score, question;
 
-       Button answer1, answer2, answer3, answer4;
+    private Questions mQuestions = new Questions();
 
-       TextView score, question;
+    private String mAnswer;
+    private int mScore = 0;
+    private int mQuestionsLength = mQuestions.mQuestions.length;
 
-       Questions mQuestions = newQuestions();
+    Random r;
 
-       String mAnswer;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.diagnostic_quiz);
 
-       int mScore = 0;
+        r = new Random();
 
-       int mQuestionsLength = mQuestions.mQuestions.length;
+        answer1 = (Button) findViewById(R.id.answer1);
+        answer2 = (Button) findViewById(R.id.answer2);
+        answer3 = (Button) findViewById(R.id.answer3);
+        answer4 = (Button) findViewById(R.id.answer4);
 
-       Random r;
+        score = (TextView) findViewById(R.id.score);
+        question = (TextView) findViewById(R.id.question);
 
-       override fun; onCreate(savedInstaceState); {
-           super.onCreate(savedInstanceState);
-           setContentView(R.layout.diagnostic_quiz);
+        score.setText("Score: " + mScore);
 
-           r = new Random();
+        updateQuestion(r.nextInt (mQuestionsLength));
 
-           answer1 = (Button) findViewById(R.id.answer1);
-           answer2 = (Button) findViewById(R.id.answer2);
-           answer3 = (Button) findViewById(R.id.answer3);
-           answer4 = (Button) findViewById(R.id.answer4);
+        answer1.setOnClickListener(); {
+            @Override
+            public void onClick(View view); {
+                        if(answer1.getText() == mAnswer) {
+                            mScore++;
+                            score.setText("Score: " + mScore);
+                            updateQuestion(r.nextInt(mQuestionsLength));
+                        } else {
+                            gameOver();
+                        }
+                    }
+        };
 
-           score = (TextView) findViewById(R.id.score);
-           question = (TextView) findViewById(R.id.question);
+        answer2.setOnClickListener(); {
+            @Override
+            public void onClick(View view); {
+                if(answer2.getText() == mAnswer) {
+                    mScore++;
+                    score.setText("Score: " + mScore);
+                    updateQuestion(r.nextInt(mQuestionsLength));
+                } else {
+                    gameOver();
+                }
+            }
+        };
 
-           score.setText("Score: " + mScore);
+        answer3.setOnClickListener(); {
+            @Override
+            public void onClick(View view); {
+                if(answer3.getText() == mAnswer) {
+                    mScore++;
+                    score.setText("Score: " + mScore);
+                    updateQuestion(r.nextInt(mQuestionsLength));
+                } else {
+                    gameOver();
+                }
+            }
+        };
 
-           updateQuestion(r.nextInt(mQuestionsLength));
+        answer4.setOnClickListener(); {
+            @Override
+            public void onClick(View view); {
+                if(answer4.getText() == mAnswer) {
+                    mScore++;
+                    score.setText("Score: " + mScore);
+                    updateQuestion(r.nextInt(mQuestionsLength));
+                } else {
+                    gameOver();
+                }
+            }
+        };
+    }
 
-           answer1.setOnClickListener(); {
-               if(answer1.getText() == mAnswer) {
-                   mScore++;
-                   score.setText("Score: " + mScore);
-                   updateQuestion(r.nextInt(mQuestionsLength));
-               } else {
-                   gameOver();
-               }
-            };
+    private void updateQuestion(int num) {
+        question.setText(mQuestions.getQuestion(num));
+        answer1.setText(mQuestions.getChoice1(num));
+        answer2.setText(mQuestions.getChoice2(num));
+        answer3.setText(mQuestions.getChoice3(num));
+        answer4.setText(mQuestions.getChoice4(num));
 
-           answer2.setOnClickListener(); {
-             if(answer2.getText() == mAnswer) {
-                 mScore++;
-                 score.setText("Score: " + mScore);
-                 updateQuestion(r.nextInt(mQuestionsLength));
-             } else{
-                 gameOver();
-             }
-            };
+        mAnswer = mQuestions.getCorrectAnswer(num);
+    }
 
-           answer3.setOnClickListener(); {
-               if (answer3.getText() == mAnswer) {
-                   mScore++;
-                   score.setText("Score: " + mScore);
-                   updateQuestion(r.nextInt(mQuestionsLength));
-               } else{
-                   gameOver();
-               }
-           };
-
-           answer4.setOnClickListener(); {
-               if (answer4.getText() == mAnswer) {
-                   mScore++;
-                   score.setText("Score: " + mScore);
-                   updateQuestion(r.nextInt(mQuestionsLength));
-               } else{
-                   gameOver();
-               }
-            };
-       }
-
-       private void updateQuestions; int num; {
-           question.setText(mQuestions.getQuestion(num));
-           answer1.setText(mQuestions.getChoice1(num));
-           answer2.setText(mQuestions.getChoice2(num));
-           answer3.setText(mQuestions.getChoice3(num));
-           answer4.setText(mQuestions.getChoice4(num));
-
-           mAnswer = mQuestions.getCorrectAnswer(num);
-        }
-
-        private void gameOver() {
-           AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DiagnosticQuiz.this);
-           alertDialogBuilder
-                   .setMessage("Game Over! Your score is" + mScore + " points")
-                   .setCancelable(false)
-                   .setPositiveButton("New Game",
-                           (dialogInterface){
-                                startActivity(new Intent(applicationContext(), DiagnosticQuiz.class));
+    private void gameOver() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DiagnosticQuiz.this);
+        alertDialogBuilder
+                .setMessage("Game Over! Your score is" + mScore + " points.")
+                .setCancelable(false)
+                .setPositiveButton("NEW GAME",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                startActivity(new Intent(getApplicationContext(),DiagnosticQuiz.class));
                                 finish();
-                           });
-                   .setNegativeButton("Exit,"
-                            (onClickListener) (dialogInterface) {
-                                    finish()
-                            });
-
-                   AlertDialog alertDialog = alertDialogBuilder.create();
-                   alertDialog.show();
+                            }
+                })
+                .setNegativeButton("EXIT",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
         }
     }
-}
