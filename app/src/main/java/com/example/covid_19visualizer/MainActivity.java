@@ -1,11 +1,14 @@
 package com.example.covid_19visualizer;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.covid_19visualizer.ui.main.DiagnosticQuiz;
 import com.example.covid_19visualizer.ui.main.SectionsPagerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -20,6 +23,7 @@ import com.google.android.material.tabs.TabLayout;
  * starts.
  */
 public class MainActivity extends FragmentActivity {
+    //private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +63,17 @@ public class MainActivity extends FragmentActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Snackbar is Google's class that creates reminder popups when an action is done.
+                openDiagnosticQuiz();
+                /* Snackbar is Google's class that creates reminder popups when an action is done.
                 Snackbar.make(view, "This could be a link to a coronavirus symptom checker or" +
                         " something, idk", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                        .setAction("Action", null).show(); */
             }
         });
+    }
+
+    public void openDiagnosticQuiz() {
+        Intent intent = new Intent(this, DiagnosticQuiz.class);
+        startActivity(intent);
     }
 }
