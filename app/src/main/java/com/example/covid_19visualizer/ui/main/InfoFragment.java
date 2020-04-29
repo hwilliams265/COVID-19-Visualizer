@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.ListFragment;
 
 import com.example.covid_19visualizer.R;
@@ -46,14 +48,17 @@ public class InfoFragment extends ListFragment
     @Override
     public View onCreateView (@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        ListView listView = (ListView) getView().findViewById(R.id.xmlinfo_list);
-        new MyAsyncTask().execute();
-        return listView;
+        return inflater.inflate(R.layout.info_fragment, container, false);
     }
 
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        listView = (ListView) view.findViewById(android.R.id.list);
+        new MyAsyncTask().execute();
+    }
 
-        class MyAsyncTask extends AsyncTask<Object,Void, ArrayAdapter>
+    class MyAsyncTask extends AsyncTask<Object,Void, ArrayAdapter>
         {
 
             @Override
