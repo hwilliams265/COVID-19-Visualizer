@@ -111,7 +111,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
     private void gameOver() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DiagnosticQuiz.this);
         alertDialogBuilder
-                .setMessage("Game Over! Your score is" + mScore + " points.")
+                .setMessage("Game Over! Your score is " + mScore + " points.")
                 .setCancelable(false)
                 .setPositiveButton("NEW GAME",
                         new DialogInterface.OnClickListener() {
