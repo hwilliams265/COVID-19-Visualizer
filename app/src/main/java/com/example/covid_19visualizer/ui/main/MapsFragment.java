@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
@@ -272,14 +273,24 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     private void initializeCovidData() {
         covidData = new CovidData(context);
 //        covidData.deleteData();
-        int downloadResult;
+        int downloadResult = 0;
         if (!covidData.isDataDownloaded()) {
             downloadResult = covidData.downloadData();
-            Log.d("MY_RESULT", String.valueOf(downloadResult));
+            while (!covidData.isDataDownloaded()) ;
         }
-        Log.d("MY_METHOD", "initializing the data...");
-        covidData.initializeData();
-        Log.d("MY_METHOD", "Finished initializing the data.");
+        Snackbar snackbar = Snackbar.make(((Activity) context).findViewById(android.R.id.content),
+                "", Snackbar.LENGTH_LONG);
+        switch (downloadResult) {
+            case 2: // Download failed, but we have old data in the system memory
+                snackbar.setText("Warning: Could not fetch new data. using data from" +
+                        covidData.localData.getName() + ".").show();
+            case 0: // Download succeeded!
+                covidData.initializeData();
+                break;
+            case 1: // Download failed with no backup
+                snackbar.setText("Error: Could not fetch new data.").show();
+        }
+
     }
 
     // Create objects for all of the circles, but don't draw them yet. Must be run before
@@ -329,6 +340,10 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                         .visible(false);
                 plottedCircles.get(category).add(googleMap.addCircle(circleOptions));
                 plottedCircles.get(category).get(i).setTag(i);
+                // The z-index determines the order of the circles on the map. If a circle
+                // overlaps another circle, the circle with the higher z-index will be clickable.
+                // We always want smaller circles to have a higher z-index than larger circles so
+                // that even completely overlapped circles will be clickable. 
                 plottedCircles.get(category).get(i)
                         .setZIndex(-((Integer) data.get("Confirmed").get(i)).floatValue());
             }
