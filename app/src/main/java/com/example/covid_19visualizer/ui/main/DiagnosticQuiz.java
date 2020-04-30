@@ -15,7 +15,7 @@ import com.example.covid_19visualizer.R;
 import java.util.Random;
 
 public class DiagnosticQuiz extends AppCompatActivity {
-    Button answer12;
+    Button next_button;
 
     CheckBox answer1, answer2, answer3, answer4, answer5, answer6, answer7, answer8, answer9, answer10, answer11;
 
@@ -46,21 +46,19 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer9 = (CheckBox) findViewById(R.id.answer9);
         answer10 = (CheckBox) findViewById(R.id.answer10);
         answer11 = (CheckBox) findViewById(R.id.answer11);
-        answer12 = (Button) findViewById(R.id.answer12);
+        next_button = (Button) findViewById(R.id.next_button);
 
 
         question = (TextView) findViewById(R.id.question);
 
 
-        updateQuestion(r.nextInt (mQuestionsLength));
+        updateQuestion(r.nextInt(mQuestionsLength));
 
         answer1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (answer1.getText() == mAnswer) {
                     updateQuestion(r.nextInt(mQuestionsLength));
-                } else {
-                    gameOver();
                 }
             }
         });
@@ -70,8 +68,6 @@ public class DiagnosticQuiz extends AppCompatActivity {
             public void onClick(View v) {
                 if (answer2.getText() == mAnswer) {
                     updateQuestion(r.nextInt(mQuestionsLength));
-                } else {
-                    gameOver();
                 }
             }
         });
@@ -81,8 +77,6 @@ public class DiagnosticQuiz extends AppCompatActivity {
             public void onClick(View v) {
                 if (answer3.getText() == mAnswer) {
                     updateQuestion(r.nextInt(mQuestionsLength));
-                } else {
-                    gameOver();
                 }
             }
         });
@@ -92,8 +86,80 @@ public class DiagnosticQuiz extends AppCompatActivity {
             public void onClick(View v) {
                 if (answer4.getText() == mAnswer) {
                     updateQuestion(r.nextInt(mQuestionsLength));
-                } else {
-                    gameOver();
+                }
+            }
+        });
+
+        answer5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (answer5.getText() == mAnswer) {
+                    updateQuestion(r.nextInt(mQuestionsLength));
+                }
+            }
+        });
+
+        answer6.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (answer6.getText() == mAnswer) {
+                    updateQuestion(r.nextInt(mQuestionsLength));
+                }
+            }
+        });
+
+        answer7.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (answer7.getText() == mAnswer) {
+                    updateQuestion(r.nextInt(mQuestionsLength));
+                }
+            }
+        });
+
+        answer8.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (answer8.getText() == mAnswer) {
+                    updateQuestion(r.nextInt(mQuestionsLength));
+                }
+            }
+        });
+
+
+        answer9.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (answer9.getText() == mAnswer) {
+                    updateQuestion(r.nextInt(mQuestionsLength));
+                }
+            }
+        });
+
+
+        answer10.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (answer10.getText() == mAnswer) {
+                    updateQuestion(r.nextInt(mQuestionsLength));
+                }
+            }
+        });
+
+        answer11.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (answer11.getText() == mAnswer) {
+                    updateQuestion(r.nextInt(mQuestionsLength));
+                }
+            }
+        });
+
+        next_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (next_button.getText() == mAnswer) {
+                    updateQuestion(r.nextInt(mQuestionsLength));
                 }
             }
         });
@@ -112,9 +178,10 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer9.setText(mQuestions.getChoice9(num));
         answer10.setText(mQuestions.getChoice10(num));
         answer11.setText(mQuestions.getChoice11(num));
-        answer12.setText(mQuestions.getChoice12(num));
+        next_button.setText(mQuestions.getChoice12(num));
 
         mAnswer = mQuestions.getCorrectAnswer(num);
+
     }
 
     private void gameOver() {
@@ -122,7 +189,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
         alertDialogBuilder
                 .setMessage("Your recommended steps are:")
                 .setCancelable(false)
-                .setPositiveButton("NEW GAME",
+                .setPositiveButton("RETAKE QUIZ",
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {

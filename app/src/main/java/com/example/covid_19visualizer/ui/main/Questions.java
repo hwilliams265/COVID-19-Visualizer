@@ -53,63 +53,63 @@ public class Questions {
     };
 
     public String getChoice1(int a) {
-        String choice = mChoices[a][0];
-        return choice;
+        String choice1 = mChoices[a][0];
+        return choice1;
     };
 
     public String getChoice2(int a) {
-        String choice = mChoices[a][0];
-        return choice;
+        String choice2 = mChoices[a][1];
+        return choice2;
     };
 
     public String getChoice3(int a) {
-        String choice = mChoices[a][0];
-        return choice;
+        String choice3 = mChoices[a][2];
+        return choice3;
     };
 
     public String getChoice4(int a) {
-        String choice = mChoices[a][0];
-        return choice;
+        String choice4 = mChoices[a][3];
+        return choice4;
     };
 
     public String getChoice5(int a) {
-        String choice = mChoices[a][0];
-        return choice;
+        String choice5 = mChoices[a][4];
+        return choice5;
     };
 
     public String getChoice6(int a) {
-        String choice = mChoices[a][0];
-        return choice;
+        String choice6 = mChoices[a][5];
+        return choice6;
     };
 
     public String getChoice7(int a) {
-        String choice = mChoices[a][0];
-        return choice;
+        String choice7 = mChoices[a][6];
+        return choice7;
     };
 
     public String getChoice8(int a) {
-        String choice = mChoices[a][0];
-        return choice;
+        String choice8 = mChoices[a][7];
+        return choice8;
     };
 
     public String getChoice9(int a) {
-        String choice = mChoices[a][0];
-        return choice;
+        String choice9 = mChoices[a][8];
+        return choice9;
     };
 
     public String getChoice10(int a) {
-        String choice = mChoices[a][0];
-        return choice;
+        String choice10 = mChoices[a][9];
+        return choice10;
     };
 
     public String getChoice11(int a) {
-        String choice = mChoices[a][0];
-        return choice;
+        String choice11 = mChoices[a][10];
+        return choice11;
     };
 
     public String getChoice12(int a) {
-        String choice = mChoices[a][0];
-        return choice;
+        String choice12 = mChoices[a][11];
+        return choice12;
     };
 
     public String getCorrectAnswer(int a) {
