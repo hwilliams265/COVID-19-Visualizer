@@ -4,7 +4,7 @@
     <string name="tab_text_2">Info</string>
     <string name="tab_text_3">News</string>
     //added by Federico for page 3
-    x
+    <string name="try_again">Reconnect</string>
 
     //Added by Jennifer
     <string name="deaths">Deaths</string>
