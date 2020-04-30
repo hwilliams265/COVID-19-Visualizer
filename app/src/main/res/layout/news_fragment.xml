@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+    <Button
+        android:layout_width="match_parent"
+        android:background="@drawable/back_ground"
+        android:layout_height="40dp"
+        android:textSize="25sp"
+        android:textColor="@android:color/background_light"
+        android:id="@+id/refresh"
+        android:text="Refresh"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/recycler"/>
 
-    <TextView
-        android:id="@+id/textDeaths"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="If you can read this, the news fragment works!"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="191dp" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
