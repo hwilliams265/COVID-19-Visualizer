@@ -12,8 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.covid_19visualizer.R;
 
-import java.util.Scanner;
+import java.lang.String;
+import java.util.List;
 import java.util.Random;
+import java.util.Arrays;
 
 public class DiagnosticQuiz extends AppCompatActivity {
     Button next_button;
@@ -23,9 +25,6 @@ public class DiagnosticQuiz extends AppCompatActivity {
     TextView question;
 
     private Questions mQuestions = new Questions();
-    private int[] QuestionNumber = {
-            0, 1, 2, 3, 4, 5, 6, 7, 8,
-    } ;
 
     private double mScore = 0;
     private String mAnswer;
@@ -55,9 +54,12 @@ public class DiagnosticQuiz extends AppCompatActivity {
 
 
         question = (TextView) findViewById(R.id.question);
+        final List<Integer> QuestionNumbers = Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
 
+        //String currentQuestion = (String) question.getText();
+        //int QuestionNumber = Arrays.asList(mQuestions.mQuestions).indexOf(currentQuestion);
 
-        updateQuestion(r.nextInt(mQuestionsLength));
+        updateQuestion(0);
 
         answer1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,19 +165,23 @@ public class DiagnosticQuiz extends AppCompatActivity {
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //if (mQuestions.getQuestion(mQuestionsLength) == mQuestions.getQuestion(8)) {
-                  //  gameOver();
-                //} else {
-                    if (next_button.getText() == mAnswer) {
-                        toggle();
-                        updateQuestion(r.nextInt(mQuestionsLength));
-                    }
-                //}
+                if (next_button.getText() == mAnswer) {
+                    toggle();
+                    String currentQuestion = (String) question.getText();
+                    int QuestionNumber = Arrays.asList(mQuestions.mQuestions).indexOf(currentQuestion);
+                    int n = QuestionNumber + 1;
+                    updateQuestion(n);
+                }
+
+                if (question.getText() == " ") {
+                    gameOver();
+                }
             }
         });
     }
 
     private void updateQuestion(int i) {
+
         question.setText(mQuestions.getQuestion(i));
 
         answer1.setText(mQuestions.getChoice1(i));
@@ -332,12 +338,12 @@ public class DiagnosticQuiz extends AppCompatActivity {
 
     private void gameOver() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DiagnosticQuiz.this);
-                if (mScore >= 2) {
+                if (mScore >= 15) {
                     alertDialogBuilder
                     .setMessage("Your recommended steps are: \n 1. Isolate from others \n 2. Rest and Take care \n 3. Talk to someone about testing \n 4. Monitor Symptoms")
                             .setCancelable(false);
                 } else {
-                    if (mScore < 2) {
+                    if (mScore < 15) {
                         alertDialogBuilder
                                 .setMessage("Your recommended steps are: \n 1. Maintain Social Distance")
                                     .setCancelable(false);
