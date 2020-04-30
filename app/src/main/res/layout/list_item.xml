@@ -22,7 +22,13 @@
             android:id="@+id/newsTitle"
             android:tag="Title"
             android:textSize="25sp"
-            android:textColor="@android:color/background_light"/>
+            android:textColor="@android:color/background_light"
+            android:shadowColor="#000000"
+            android:shadowDx="3.2"
+            android:shadowDy="3.2"
+            android:shadowRadius="2"/>
+
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -20,7 +20,7 @@ import com.example.covid_19visualizer.ui.main.NewsFragment;
 import com.squareup.picasso.Picasso;
 
 public class NewsInDetails extends AppCompatActivity {
-    TextView newsTitle,newsSource,newsTime,newsDesc;
+    TextView newsTitle,newsSource,newsTime;
     ImageView imageView;
     WebView webView;
     ProgressBar loader;
@@ -30,7 +30,7 @@ public class NewsInDetails extends AppCompatActivity {
         setContentView(R.layout.activity_news_in_details);
         newsTitle=findViewById(R.id.newsTitle);
         newsSource=findViewById(R.id.Source);
-        newsTime=findViewById(R.id.newsDate);
+        //newsTime=findViewById(R.id.newsDate);
         webView=findViewById(R.id.webView);
         imageView=findViewById(R.id.imageView);
         loader = findViewById(R.id.loader);
@@ -38,7 +38,7 @@ public class NewsInDetails extends AppCompatActivity {
         Intent intent=getIntent();
         String title=intent.getStringExtra("title");
         String source=intent.getStringExtra("source");
-        String time=intent.getStringExtra("time");
+        //String time=intent.getStringExtra("time");
         String imageUrl=intent.getStringExtra("imageUrl");
         String url=intent.getStringExtra("url");
 
@@ -46,7 +46,7 @@ public class NewsInDetails extends AppCompatActivity {
 
         newsTitle.setText(title);
         newsSource.setText(source);
-        newsTime.setText(time);
+        //newsTime.setText(time);
 
        Picasso.get().load(imageUrl).into(imageView);
 
