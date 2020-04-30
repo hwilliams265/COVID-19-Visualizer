@@ -47,7 +47,8 @@
         app:layout_constraintBottom_toTopOf="@+id/answer2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/question" />
+        app:layout_constraintTop_toBottomOf="@+id/question"
+        android:visibility="invisible"/>
 
     <CheckBox
         android:id="@+id/answer2"
@@ -61,7 +62,8 @@
         app:layout_constraintBottom_toTopOf="@+id/answer3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answer1" />
+        app:layout_constraintTop_toBottomOf="@+id/answer1"
+        android:visibility="invisible" />
 
     <CheckBox
         android:id="@+id/answer3"
@@ -75,7 +77,8 @@
         app:layout_constraintBottom_toTopOf="@+id/answer4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answer2" />
+        app:layout_constraintTop_toBottomOf="@+id/answer2"
+        android:visibility="invisible" />
 
     <CheckBox
         android:id="@+id/answer4"
@@ -89,7 +92,8 @@
         app:layout_constraintBottom_toTopOf="@+id/answer5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answer3" />
+        app:layout_constraintTop_toBottomOf="@+id/answer3"
+        android:visibility="invisible" />
 
     <CheckBox
         android:id="@+id/answer5"
@@ -103,7 +107,8 @@
         app:layout_constraintBottom_toTopOf="@+id/answer6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answer4" />
+        app:layout_constraintTop_toBottomOf="@+id/answer4"
+        android:visibility="invisible" />
 
     <CheckBox
         android:id="@+id/answer6"
@@ -117,7 +122,8 @@
         app:layout_constraintBottom_toTopOf="@+id/answer7"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answer5" />
+        app:layout_constraintTop_toBottomOf="@+id/answer5"
+        android:visibility="invisible" />
 
     <CheckBox
         android:id="@+id/answer7"
@@ -131,7 +137,8 @@
         app:layout_constraintBottom_toTopOf="@+id/answer8"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answer6" />
+        app:layout_constraintTop_toBottomOf="@+id/answer6"
+        android:visibility="invisible" />
 
     <CheckBox
         android:id="@+id/answer8"
@@ -145,7 +152,8 @@
         app:layout_constraintBottom_toTopOf="@+id/answer9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answer7" />
+        app:layout_constraintTop_toBottomOf="@+id/answer7"
+        android:visibility="invisible" />
 
     <CheckBox
         android:id="@+id/answer9"
@@ -159,7 +167,8 @@
         app:layout_constraintBottom_toTopOf="@+id/answer10"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answer8" />
+        app:layout_constraintTop_toBottomOf="@+id/answer8"
+        android:visibility="invisible" />
 
     <CheckBox
         android:id="@+id/answer10"
@@ -173,7 +182,8 @@
         app:layout_constraintBottom_toTopOf="@+id/answer11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answer9" />
+        app:layout_constraintTop_toBottomOf="@+id/answer9"
+        android:visibility="invisible" />
 
     <CheckBox
         android:id="@+id/answer11"
@@ -184,8 +194,9 @@
         android:layout_marginEnd="1dp"
         android:layout_marginRight="1dp"
         android:text="CheckBox"
-        app:layout_constraintBottom_toTopOf="@+id/answer12"
+        app:layout_constraintBottom_toTopOf="@+id/next_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/answer10" />
+        app:layout_constraintTop_toBottomOf="@+id/answer10"
+        android:visibility="invisible" />
 </androidx.constraintlayout.widget.ConstraintLayout>

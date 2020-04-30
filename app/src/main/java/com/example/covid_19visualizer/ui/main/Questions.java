@@ -2,7 +2,7 @@ package com.example.covid_19visualizer.ui.main;
 
 public class Questions {
 
-    public String mQuestions[] = {
+    public String[] mQuestions = {
             "Is this an emergency? \n Stop and call 911 if you are experiencing: \n Severe, constant chest pain or pressure \n Extreme difficulty breathing \n Severe, constant lightheadedness \n Serious disorientation or unresponsiveness",
             "How old are you?",
             "Are you experiencing any of these symptoms? \n Select all that apply",
@@ -11,7 +11,7 @@ public class Questions {
             "In the last 14 days, have you been in an area where COVID-19 is widespread? \n Select all that apply",
             "In the last 14 days, what is your exposure to others who are known to have COVID-19? \n Select all that apply",
             "Do you live in a care facility? \n This includes nursing homes or assisted living facilities",
-            "Do you work in a medical facility? \n This includes a hospital, emergency room, other medical setting, or long-term care facility. Select all that apply",
+            "Do you work in a medical facility? \n This includes a hospital, emergency room, other medical setting, or long-term care facility. Select all that apply"
             // Screening Test Questions
     };
 
@@ -45,6 +45,7 @@ public class Questions {
     };
 
     private String[] mCorrectAnswers = {"Next", "Next", "Next", "Next", "Next", "Next", "Next", "Next", "Next", "Next", "Next"};
+
 
     public String getQuestion(int a) {
         String question = mQuestions[a];
