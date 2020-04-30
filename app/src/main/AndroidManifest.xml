@@ -31,6 +31,7 @@
         <activity android:name=".ui.main.MapsFragment" />
         <activity android:name=".ui.main.NewsFragment" />
         <activity android:name=".ui.main.InfoFragment" />
+        <activity android:name=".NewsInDetails"/>
         <activity android:name=".RegionInfoPopup" />
         <activity android:name=".ui.main.DiagnosticQuiz" />
 
