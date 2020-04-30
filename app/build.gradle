@@ -42,6 +42,7 @@ dependencies {
     implementation 'org.jetbrains:annotations-java5:15.0'
     implementation 'com.google.android.gms:play-services-location:17.0.0'
 
+
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'androidx.appcompat:appcompat:1.2.0-beta01'
     implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
