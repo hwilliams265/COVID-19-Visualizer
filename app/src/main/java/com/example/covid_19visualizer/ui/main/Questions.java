@@ -11,7 +11,8 @@ public class Questions {
             "In the last 14 days, have you been in an area where COVID-19 is widespread? \n Select all that apply",
             "In the last 14 days, what is your exposure to others who are known to have COVID-19? \n Select all that apply",
             "Do you live in a care facility? \n This includes nursing homes or assisted living facilities",
-            "Do you work in a medical facility? \n This includes a hospital, emergency room, other medical setting, or long-term care facility. Select all that apply"
+            "Do you work in a medical facility? \n This includes a hospital, emergency room, other medical setting, or long-term care facility. Select all that apply",
+            " "
             // Screening Test Questions
     };
 
@@ -42,9 +43,10 @@ public class Questions {
             {"I have worked in a hospital or other care facility in the past 14 days",
                     "I plan to work in a hospital or other care facility in the next 14 days",
                     "No, I don't work or plan to work in a care facility", " ", " ", " ", " ", " ", " ", " ", " ", "Next"},
+            {" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " "},
     };
 
-    private String[] mCorrectAnswers = {"Next", "Next", "Next", "Next", "Next", "Next", "Next", "Next", "Next", "Next", "Next"};
+    private String[] mCorrectAnswers = {"Next", "Next", "Next", "Next", "Next", "Next", "Next", "Next", "Next", "Next", "Next", " "};
 
 
     public String getQuestion(int a) {
