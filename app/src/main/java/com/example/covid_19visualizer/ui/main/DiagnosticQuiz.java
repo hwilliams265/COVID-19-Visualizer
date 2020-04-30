@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.covid_19visualizer.R;
 
+import java.util.Scanner;
 import java.util.Random;
 
 public class DiagnosticQuiz extends AppCompatActivity {
@@ -22,7 +23,11 @@ public class DiagnosticQuiz extends AppCompatActivity {
     TextView question;
 
     private Questions mQuestions = new Questions();
+    private int[] QuestionNumber = {
+            0, 1, 2, 3, 4, 5, 6, 7, 8,
+    } ;
 
+    private double mScore = 0;
     private String mAnswer;
     private int mQuestionsLength = mQuestions.mQuestions.length;
 
@@ -58,7 +63,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer1.isChecked()) {
-
+                    mScore = mScore + 4.11;
                 }
             }
         });
@@ -67,7 +72,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer2.isChecked()) {
-
+                    mScore = mScore + 2.11;
                 }
             }
         });
@@ -76,7 +81,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer3.isChecked()) {
-
+                    mScore = mScore + 2.17;
                 }
             }
         });
@@ -85,7 +90,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer4.isChecked()) {
-
+                    mScore = mScore + 0.5;
                 }
             }
         });
@@ -94,7 +99,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer5.isChecked()) {
-
+                    mScore = mScore + 1.67;
                 }
             }
         });
@@ -103,7 +108,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer6.isChecked()) {
-
+                    mScore = mScore + 1;
                 }
             }
         });
@@ -112,7 +117,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer7.isChecked()) {
-
+                    mScore = mScore + 1;
                 }
             }
         });
@@ -121,7 +126,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer8.isChecked()) {
-
+                    mScore = mScore + 1;
                 }
             }
         });
@@ -131,7 +136,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer9.isChecked()) {
-
+                    mScore = mScore + 1;
                 }
             }
         });
@@ -141,7 +146,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer10.isChecked()) {
-
+                    mScore = mScore + 1;
                 }
             }
         });
@@ -150,7 +155,7 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer11.isChecked()) {
-
+                    mScore = mScore + 0;
                 }
             }
         });
@@ -158,9 +163,9 @@ public class DiagnosticQuiz extends AppCompatActivity {
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //if (mQuestions.getQuestion(mQuestionsLength) == mQuestions.getQuestion(9)) {
+                //if (mQuestions.getQuestion(mQuestionsLength) == mQuestions.getQuestion(8)) {
                   //  gameOver();
-               // } else {
+                //} else {
                     if (next_button.getText() == mAnswer) {
                         toggle();
                         updateQuestion(r.nextInt(mQuestionsLength));
@@ -170,22 +175,112 @@ public class DiagnosticQuiz extends AppCompatActivity {
         });
     }
 
-    private void updateQuestion(int num) {
-        question.setText(mQuestions.getQuestion(num));
-        answer1.setText(mQuestions.getChoice1(num));
-        answer2.setText(mQuestions.getChoice2(num));
-        answer3.setText(mQuestions.getChoice3(num));
-        answer4.setText(mQuestions.getChoice4(num));
-        answer5.setText(mQuestions.getChoice5(num));
-        answer6.setText(mQuestions.getChoice6(num));
-        answer7.setText(mQuestions.getChoice7(num));
-        answer8.setText(mQuestions.getChoice8(num));
-        answer9.setText(mQuestions.getChoice9(num));
-        answer10.setText(mQuestions.getChoice10(num));
-        answer11.setText(mQuestions.getChoice11(num));
-        next_button.setText(mQuestions.getChoice12(num));
+    private void updateQuestion(int i) {
+        question.setText(mQuestions.getQuestion(i));
 
-        mAnswer = mQuestions.getCorrectAnswer(num);
+        answer1.setText(mQuestions.getChoice1(i));
+            int viewMode = 0;
+            if (answer1.getText() == " ") {
+                viewMode = View.GONE;
+            } else {
+                viewMode = View.VISIBLE;
+            }
+
+            answer1.setVisibility(viewMode);
+
+        answer2.setText(mQuestions.getChoice2(i));
+            if (answer2.getText() == " ") {
+                viewMode = View.GONE;
+            } else {
+                viewMode = View.VISIBLE;
+            }
+
+            answer2.setVisibility(viewMode);
+
+        answer3.setText(mQuestions.getChoice3(i));
+            if (answer3.getText() == " ") {
+                viewMode = View.GONE;
+            } else {
+                viewMode = View.VISIBLE;
+            }
+
+            answer3.setVisibility(viewMode);
+
+        answer4.setText(mQuestions.getChoice4(i));
+            if (answer4.getText() == " ") {
+                viewMode = View.GONE;
+            } else {
+                viewMode = View.VISIBLE;
+            }
+
+            answer4.setVisibility(viewMode);
+
+        answer5.setText(mQuestions.getChoice5(i));
+            if (answer5.getText() == " ") {
+                viewMode = View.GONE;
+            } else {
+                viewMode = View.VISIBLE;
+            }
+
+            answer5.setVisibility(viewMode);
+
+        answer6.setText(mQuestions.getChoice6(i));
+            if (answer6.getText() == " ") {
+                viewMode = View.GONE;
+            } else {
+                viewMode = View.VISIBLE;
+            }
+
+            answer6.setVisibility(viewMode);
+
+        answer7.setText(mQuestions.getChoice7(i));
+            if (answer7.getText() == " ") {
+                viewMode = View.GONE;
+            } else {
+                viewMode = View.VISIBLE;
+            }
+
+            answer7.setVisibility(viewMode);
+
+        answer8.setText(mQuestions.getChoice8(i));
+            if (answer8.getText() == " ") {
+                viewMode = View.GONE;
+            } else {
+                viewMode = View.VISIBLE;
+            }
+
+            answer8.setVisibility(viewMode);
+
+        answer9.setText(mQuestions.getChoice9(i));
+            if (answer9.getText() == " ") {
+                viewMode = View.GONE;
+            } else {
+                viewMode = View.VISIBLE;
+            }
+
+            answer9.setVisibility(viewMode);
+
+        answer10.setText(mQuestions.getChoice10(i));
+            if (answer10.getText() == " ") {
+                viewMode = View.GONE;
+            } else {
+                viewMode = View.VISIBLE;
+            }
+
+            answer10.setVisibility(viewMode);
+
+        answer11.setText(mQuestions.getChoice11(i));
+            if (answer11.getText() == " ") {
+                viewMode = View.GONE;
+            } else {
+                viewMode = View.VISIBLE;
+            }
+
+            answer11.setVisibility(viewMode);
+
+        next_button.setText(mQuestions.getChoice12(i));
+
+        mAnswer = mQuestions.getCorrectAnswer(i);
 
     }
 
@@ -237,9 +332,19 @@ public class DiagnosticQuiz extends AppCompatActivity {
 
     private void gameOver() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DiagnosticQuiz.this);
-        alertDialogBuilder
-                .setMessage("Your recommended steps are: \n 1. Isolate from others \n 2. Rest and Take care \n 3. Talk to someone about testing \n 4. Monitor Symptoms")
-                .setCancelable(false)
+                if (mScore >= 2) {
+                    alertDialogBuilder
+                    .setMessage("Your recommended steps are: \n 1. Isolate from others \n 2. Rest and Take care \n 3. Talk to someone about testing \n 4. Monitor Symptoms")
+                            .setCancelable(false);
+                } else {
+                    if (mScore < 2) {
+                        alertDialogBuilder
+                                .setMessage("Your recommended steps are: \n 1. Maintain Social Distance")
+                                    .setCancelable(false);
+                    }
+                }
+
+                alertDialogBuilder
                 .setPositiveButton("RETAKE QUIZ",
                         new DialogInterface.OnClickListener() {
                             @Override
