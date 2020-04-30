@@ -24,7 +24,9 @@ public class InfoAdapter extends ArrayAdapter<xmlinfo> {
     private Context mContext;
     private List<xmlinfo> xmlinfoList = new ArrayList<>();
 
-    public InfoAdapter(@NonNull Context context, @LayoutRes ArrayList<xmlinfo> list)
+
+    public InfoAdapter(@NonNull Context context, ArrayList<xmlinfo> list)
+
     {
         super(context, 0, list);
         mContext = context;
@@ -36,7 +38,9 @@ public class InfoAdapter extends ArrayAdapter<xmlinfo> {
     public View getView(int position, @Nullable View convertview, @NonNull ViewGroup parent) {
         View listItem = convertview;
         if (listItem == null)
-            listItem = LayoutInflater.from(mContext).inflate(R.layout.list_item, parent, false);
+
+            listItem = LayoutInflater.from(mContext).inflate(R.layout.info_list_item, parent, false);
+
 
         xmlinfo currentxmlinfo = xmlinfoList.get(position);
 
