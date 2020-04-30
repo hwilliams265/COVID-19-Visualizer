@@ -57,8 +57,8 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (answer1.getText() == mAnswer) {
-                    updateQuestion(r.nextInt(mQuestionsLength));
+                if (answer1.isChecked()) {
+
                 }
             }
         });
@@ -66,8 +66,8 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (answer2.getText() == mAnswer) {
-                    updateQuestion(r.nextInt(mQuestionsLength));
+                if (answer2.isChecked()) {
+
                 }
             }
         });
@@ -75,8 +75,8 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (answer3.getText() == mAnswer) {
-                    updateQuestion(r.nextInt(mQuestionsLength));
+                if (answer3.isChecked()) {
+
                 }
             }
         });
@@ -84,8 +84,8 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (answer4.getText() == mAnswer) {
-                    updateQuestion(r.nextInt(mQuestionsLength));
+                if (answer4.isChecked()) {
+
                 }
             }
         });
@@ -93,8 +93,8 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer5.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (answer5.getText() == mAnswer) {
-                    updateQuestion(r.nextInt(mQuestionsLength));
+                if (answer5.isChecked()) {
+
                 }
             }
         });
@@ -102,8 +102,8 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer6.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (answer6.getText() == mAnswer) {
-                    updateQuestion(r.nextInt(mQuestionsLength));
+                if (answer6.isChecked()) {
+
                 }
             }
         });
@@ -111,8 +111,8 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer7.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (answer7.getText() == mAnswer) {
-                    updateQuestion(r.nextInt(mQuestionsLength));
+                if (answer7.isChecked()) {
+
                 }
             }
         });
@@ -120,8 +120,8 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer8.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (answer8.getText() == mAnswer) {
-                    updateQuestion(r.nextInt(mQuestionsLength));
+                if (answer8.isChecked()) {
+
                 }
             }
         });
@@ -130,8 +130,8 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer9.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (answer9.getText() == mAnswer) {
-                    updateQuestion(r.nextInt(mQuestionsLength));
+                if (answer9.isChecked()) {
+
                 }
             }
         });
@@ -140,8 +140,8 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer10.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (answer10.getText() == mAnswer) {
-                    updateQuestion(r.nextInt(mQuestionsLength));
+                if (answer10.isChecked()) {
+
                 }
             }
         });
@@ -149,8 +149,8 @@ public class DiagnosticQuiz extends AppCompatActivity {
         answer11.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (answer11.getText() == mAnswer) {
-                    updateQuestion(r.nextInt(mQuestionsLength));
+                if (answer11.isChecked()) {
+
                 }
             }
         });
@@ -158,9 +158,14 @@ public class DiagnosticQuiz extends AppCompatActivity {
         next_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (next_button.getText() == mAnswer) {
-                    updateQuestion(r.nextInt(mQuestionsLength));
-                }
+                //if (mQuestions.getQuestion(mQuestionsLength) == mQuestions.getQuestion(9)) {
+                  //  gameOver();
+               // } else {
+                    if (next_button.getText() == mAnswer) {
+                        toggle();
+                        updateQuestion(r.nextInt(mQuestionsLength));
+                    }
+                //}
             }
         });
     }
@@ -184,10 +189,56 @@ public class DiagnosticQuiz extends AppCompatActivity {
 
     }
 
+    private void toggle() {
+        if (answer1.isChecked()) {
+            answer1.toggle();
+        }
+
+        if (answer2.isChecked()) {
+            answer2.toggle();
+        }
+
+        if (answer3.isChecked()) {
+            answer3.toggle();
+        }
+
+        if (answer4.isChecked()) {
+            answer4.toggle();
+        }
+
+        if (answer5.isChecked()) {
+            answer5.toggle();
+        }
+
+        if (answer6.isChecked()) {
+            answer6.toggle();
+        }
+
+        if (answer7.isChecked()) {
+            answer7.toggle();
+        }
+
+        if (answer8.isChecked()) {
+            answer8.toggle();
+        }
+
+        if (answer9.isChecked()) {
+            answer9.toggle();
+        }
+
+        if (answer10.isChecked()) {
+            answer10.toggle();
+        }
+
+        if (answer11.isChecked()) {
+            answer11.toggle();
+        }
+    }
+
     private void gameOver() {
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(DiagnosticQuiz.this);
         alertDialogBuilder
-                .setMessage("Your recommended steps are:")
+                .setMessage("Your recommended steps are: \n 1. Isolate from others \n 2. Rest and Take care \n 3. Talk to someone about testing \n 4. Monitor Symptoms")
                 .setCancelable(false)
                 .setPositiveButton("RETAKE QUIZ",
                         new DialogInterface.OnClickListener() {
