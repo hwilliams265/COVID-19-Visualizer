@@ -23,7 +23,7 @@ import com.google.android.material.tabs.TabLayout;
  * starts.
  */
 public class MainActivity extends FragmentActivity {
-    //private FloatingActionButton fab;
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
