@@ -1,11 +1,11 @@
 package com.example.covid_19visualizer.maps;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -39,9 +39,10 @@ import java.util.Map;
  * https://github.com/CSSEGISandData/COVID-19/tree/master/csse_covid_19_data
  * /csse_covid_19_daily_reports.
  */
+@SuppressWarnings("ConstantConditions")
 public class CovidData {
 
-    public File localData; // Where the data is stored after it's downloaded
+    File localData; // Where the data is stored after it's downloaded
     private URL onlineDataPath; // the path to the csv on the github repository
     private Date date; // The date of the most recent csv data
     private File dataDirectory; // the folder containing the data
@@ -57,11 +58,13 @@ public class CovidData {
     private Context context;
 
     // The default constructor. It grabs the current date and the github link
-    public CovidData(@NotNull Context context) {
+    CovidData(@NotNull Context context) {
         this.context = context;
 
+        @SuppressLint("SimpleDateFormat")
         DateFormat dateFormat = new SimpleDateFormat("MM-dd-yyyy");
         date = new Date();
+        //noinspection deprecation
         date.setDate(date.getDate() - 1);
 
         try {
@@ -83,11 +86,13 @@ public class CovidData {
     /******************************************************/
     // This function is only used for debugging purposes so that we can simulate the downloading
     // process multiple times
+    @SuppressWarnings("unused")
     public void deleteData() {
         File[] localDataFiles = dataDirectory.listFiles();
         assert localDataFiles != null;
         for (File localDataFile : localDataFiles) {
             if (!localDataFile.isDirectory()) {
+                //noinspection ResultOfMethodCallIgnored
                 localDataFile.delete();
             }
         }
@@ -102,7 +107,7 @@ public class CovidData {
     //      0 -> data downloaded successfully
     //      1 -> data could not be downloaded, no old data to fall back on
     //      2 -> data could not be downloaded but we do have old data to fall back on
-    public int downloadData() {
+    int downloadData() {
         DownloadDataTask downloadDataTask =
                 new DownloadDataTask(((Activity) context).findViewById(android.R.id.content));
 
@@ -111,16 +116,17 @@ public class CovidData {
     }
 
 
-    public boolean isDataDownloaded() {
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
+    boolean isDataDownloaded() {
         return isDataDownloaded;
     }
 
     // Create usable data from the downloaded csv
-    public void initializeData() {
+    void initializeData() {
         String[] CATEGORIES = new String[]{"County", "Province_State", "Country_Region",
                 "Last_Update", "Lat", "Long", "Confirmed", "Deaths", "Recovered", "Active"};
         for (String category : CATEGORIES) {
-            data.put(category, new ArrayList<Object>());
+            data.put(category, new ArrayList<>());
         }
 
         try {
@@ -217,7 +223,7 @@ public class CovidData {
 
         Map<String, List<Object>> stateData = new HashMap<>();
         for (String category : CATEGORIES) {
-            stateData.put(category, new ArrayList<Object>());
+            stateData.put(category, new ArrayList<>());
         }
         for (String stateName : STATE_NAMES) {
             stateData.get("Country_Region").add(stateName);
@@ -240,6 +246,7 @@ public class CovidData {
                 if (data.get("Province_State").get(i).equals(stateName)) {
                     for (String category : new String[]{"Confirmed", "Deaths", "Recovered",
                             "Active"}) {
+                        //noinspection RedundantCast
                         stateTally.put(category,
                                 stateTally.get(category) + (Integer) data.get(category).get(i));
                     }
@@ -280,11 +287,12 @@ public class CovidData {
         }
     }
 
-    public Map<String, List<Object>> getData() {
+    Map<String, List<Object>> getData() {
         return data;
     }
 
     // Downloading data must be done in the background, hence the need for this sub class.
+    @SuppressLint("StaticFieldLeak")
     private class DownloadDataTask extends AsyncTask<URL, Integer, Integer> {
 
 
@@ -298,7 +306,7 @@ public class CovidData {
 
         // constructor that assigns the rootView member, allowing us to create a snackbar in
         // onPostExecute
-        public DownloadDataTask(View rootView) {
+        DownloadDataTask(View rootView) {
             this.rootView = rootView;
         }
 
@@ -350,6 +358,7 @@ public class CovidData {
             assert localDataFiles != null;
             for (File localDataFile : localDataFiles) {
                 if (!localDataFile.getName().equals(localData.getName())) {
+                    //noinspection ResultOfMethodCallIgnored
                     localDataFile.delete();
                 }
             }
@@ -374,6 +383,7 @@ public class CovidData {
                 isDataDownloaded = true;
                 String name = localData.getName();
                 name = name.substring(0, name.length() - 4);
+                //noinspection deprecation
                 date = new Date(name);
                 return 2; // There is a file from a previous day
             }

@@ -44,14 +44,16 @@ import java.util.Map;
  * Created by: Harry
  * <p>
  * This class contains everything needed for the maps_fragment.xml page.
- * A lot of the code here was taken from various stackoverflow threads, so I can't claim to know
+ * A lot of the code here was taken from various stack overflow threads, so I can't claim to know
  * exactly how it all works.
  */
+@SuppressWarnings("ConstantConditions")
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
     private CovidData covidData;
+    @SuppressWarnings("FieldCanBeLocal")
     private FloatingActionButton fabExpand;
     private FloatingActionButton fabDeaths;
     private FloatingActionButton fabRecovered;
@@ -258,7 +260,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             // to happen within an AysncTask, but this means that the data is initialized before
             // the data is downloaded, resulting in an error. This while() statement will force
             // the program to wait until the data is downloaded before continuing.
-            while(!covidData.isDataDownloaded());
+
+            //noinspection StatementWithEmptyBody
+            while (!covidData.isDataDownloaded()) ;
         }
         Snackbar snackbar = Snackbar.make(((Activity) context).findViewById(android.R.id.content),
                 "", Snackbar.LENGTH_LONG);
@@ -310,6 +314,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                     throw new IllegalStateException("Unexpected value: " + category);
             }
             for (int i = 0; i < data.get(category).size(); i++) {
+                @SuppressWarnings({"UnnecessaryUnboxing", "RedundantCast"})
                 CircleOptions circleOptions = new CircleOptions()
                         .center(new LatLng((double) data.get("Lat").get(i),
                                 (double) data.get("Long").get(i)))
