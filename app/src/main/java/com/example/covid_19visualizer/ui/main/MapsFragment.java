@@ -55,7 +55,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
-    public CovidData covidData;
+    private CovidData covidData;
     private FloatingActionButton fabExpand;
     private FloatingActionButton fabDeaths;
     private FloatingActionButton fabRecovered;
@@ -73,22 +73,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     private Map<String, List<Circle>> plottedCircles = null;
 
-    // See InfoFragment for more info about the newInstance() method
-//    @NotNull
-//    public static MapsFragment newInstance() {
-//        Bundle bundle = new Bundle();
-//        MapsFragment fragment = new MapsFragment();
-//        fragment.setArguments(bundle);
-//        return fragment;
-//    }
-
     // onAttach() is automatically run before onCreate()
     @Override
     public void onAttach(@NotNull Context context) {
         super.onAttach(context);
         this.context = context;
     }
-
 
     // onCreateView() is automatically run after onCreate() when the fragment is called to view.
     // It returns a View object that displays the maps interface.
@@ -106,11 +96,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         // Instantiates the mapFragment object and links it to the map xml object
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        // raise an exception if mapFragment is null (makes bug checking easier)
-        assert mapFragment != null;
         // Set a callback object to trigger when the map is ready to use
         mapFragment.getMapAsync(this);
-
         if (googleApiClient != null) {
             googleApiClient.connect();
         }
@@ -126,7 +113,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         active = view.findViewById(R.id.textActive);
         confirmed = view.findViewById(R.id.textConfirmed);
 
-
+        // When the green button in the bottom left is clicked, toggle the visibility of the 4
+        // modal buttons above it and their text.
         fabExpand.setOnClickListener(new View.OnClickListener() {
             private boolean isExpanded = true;
 
@@ -191,6 +179,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         // we want to reset the displayed circles (the button states get reset automatically).
         if (plottedCircles != null) {
             for (String category : new String[]{"Deaths", "Recovered", "Active"}) {
+                // If only 1 element is visible, we know that all the elements will be visible
+                // (and vice-versa).
                 if (plottedCircles.get(category).get(0).isVisible()) {
                     toggleCircles(category);
                 }
@@ -217,11 +207,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     // Instantiate the GoogleMap and the GoogleApiClient
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
-        Log.d("CREATION", "OnMapReady() is being executed");
-
         this.googleMap = googleMap;
-
         if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(context)
                     .addConnectionCallbacks(this)
@@ -240,16 +226,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         super.onStart();
     }
 
-    // onConnected() is executed when googleApiClient.connect() is run. We use it to load the
+    // onConnected() is executed when googleApiClient.connect() is returns. We use it to load the
     // .csv containing the COVID-19 data into a hash map, and to draw all of the circles on the
     // map (but make them all invisible). This slows the start-up time slightly, but it makes the
     // app run much smoother once its started up.
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
-        Log.d("CREATED", "onConnected() being executed");
-
         // If the permissions needed to run the app are granted...
         if (ActivityCompat.checkSelfPermission(context,
                 android.Manifest.permission.ACCESS_FINE_LOCATION) !=
@@ -258,14 +241,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                         android.Manifest.permission.ACCESS_COARSE_LOCATION) !=
                         PackageManager.PERMISSION_GRANTED) {
 
-            Log.d("CREATION", "maps permissions passed!");
-
             initializeCovidData();
             initializePlottedCircles();
             toggleCircles("Confirmed");
 
-            LatLng paris = new LatLng(48, 2);
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(paris));
+            LatLng nyc = new LatLng(41, -74);
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(nyc));
         }
     }
 
@@ -276,7 +257,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         int downloadResult = 0;
         if (!covidData.isDataDownloaded()) {
             downloadResult = covidData.downloadData();
-            while (!covidData.isDataDownloaded()) ;
+            // This next line is horrible programming practice, but I'm not really sure how else
+            // to fix the issue within the scope of this project. Android requires data downloads
+            // to happen within an AysncTask, but this means that the data is initialized before
+            // the data is downloaded, resulting in an error. This while() statement will force
+            // the program to wait until the data is downloaded before continuing.
+            while(!covidData.isDataDownloaded());
         }
         Snackbar snackbar = Snackbar.make(((Activity) context).findViewById(android.R.id.content),
                 "", Snackbar.LENGTH_LONG);
@@ -290,7 +276,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             case 1: // Download failed with no backup
                 snackbar.setText("Error: Could not fetch new data.").show();
         }
-
     }
 
     // Create objects for all of the circles, but don't draw them yet. Must be run before
@@ -349,6 +334,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
             }
         }
 
+        // When a circle is clicked, send the info about the circle to the RegionInfoPopup
+        // activity and start that activity.
         googleMap.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
             @Override
             public void onCircleClick(Circle circle) {
