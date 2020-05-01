@@ -1,6 +1,6 @@
-package com.example.covid_19visualizer;
+package com.example.covid_19visualizer.news;
 
-import com.example.covid_19visualizer.parameter.Headlines;
+import com.example.covid_19visualizer.news.parameter.Headlines;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
