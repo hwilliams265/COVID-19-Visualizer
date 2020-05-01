@@ -1,4 +1,4 @@
-package com.example.covid_19visualizer.ui.main;
+package com.example.covid_19visualizer.info;
 
 //created by Federico Coppo
 //created to tell the adapter what type of data to display
@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.LayoutRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
