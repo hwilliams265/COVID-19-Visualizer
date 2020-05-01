@@ -16,7 +16,7 @@ Using the Github Repository link a user can take the following steps to clone th
   * After opening Android Studio, select the "Open an existing Android Studio" project option and select the directory where the repository was cloned to. Within this directory there should be a folder titled "COVID-19-Visualizer." Select it and open it in Android Studio.
   * In order to run the app, click on the "run" button in the upper right corner of the Android Studio user interface.
 
-* If the user wishes to clone the repository straight from Android Studio: 
+If the user wishes to clone the repository straight from Android Studio: 
   * After starting up Android Studio select the "Check out project from Version Control."
   * Select the "Git" option.
   * Select the directory where you would like to save the project.
