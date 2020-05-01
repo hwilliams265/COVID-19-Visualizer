@@ -65,7 +65,11 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer1.isChecked()) {
-                    mScore = mScore + 4.11;
+                    if (Arrays.asList("Fever, chills, or sweating", "Moderate to severe asthma or chronic lung disease").contains( (String) answer1.getText())) {
+                        mScore = mScore + 1;
+                    } else {
+                        mScore = mScore + 5;
+                    }
                 }
             }
         });
@@ -74,7 +78,17 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer2.isChecked()) {
-                    mScore = mScore + 2.11;
+                    if (answer2.getText() == "I've had close contact with someone who has COVID-19") {
+                        mScore = mScore + 5;
+                    }
+                    if (Arrays.asList("Difficulty breathing (not severe)", "Cancer treatment or medicines causing immune suppression").contains( (String) answer2.getText())) {
+                        mScore = mScore + 1;
+                    }
+                    if (Arrays.asList("Between 18 and 64", "I have visited an area where COVID-19 is widespread").contains( (String) answer2.getText())) {
+                        mScore = mScore + 3;
+                    } else {
+                        mScore = mScore + 0;
+                    }
                 }
             }
         });
@@ -83,7 +97,17 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer3.isChecked()) {
-                    mScore = mScore + 2.17;
+                    if (answer3.getText() == "65 or older") {
+                        mScore = mScore + 5;
+                    }
+                    if (Arrays.asList("New or worsening cough", "Inherited immune system deficiencies").contains( (String) answer3.getText())) {
+                        mScore = mScore + 1;
+                    }
+                    if (Arrays.asList("I don't know", "I've been near someone who has COVID-19").contains( (String) answer3.getText())) {
+                        mScore = mScore + 3;
+                    } else {
+                        mScore = mScore + 0;
+                    }
                 }
             }
         });
@@ -92,7 +116,9 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer4.isChecked()) {
-                    mScore = mScore + 0.5;
+                    if (Arrays.asList("Sore throat", "Serious heart conditions, such as heart failure or prior heart attack").contains((String) answer4.getText())) {
+                        mScore = mScore + 1;
+                    }
                 }
             }
         });
@@ -101,7 +127,14 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer5.isChecked()) {
-                    mScore = mScore + 1.67;
+                    if (answer5.getText() == "I don't know") {
+                        mScore = mScore +3;
+                    }
+                    if (Arrays.asList("Aching throughout the body", "Diabetes with complications").contains( (String) answer5.getText())){
+                        mScore = mScore + 1;
+                    } else {
+                        mScore = mScore + 0;
+                    }
                 }
             }
         });
@@ -110,7 +143,11 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer6.isChecked()) {
-                    mScore = mScore + 1;
+                    if (Arrays.asList("Vomiting or diarrhea", "Kidney failure that needs dialysis").contains( (String) answer6.getText())){
+                        mScore = mScore + 1;
+                    } else {
+                        mScore = mScore + 0;
+                    }
                 }
             }
         });
@@ -119,7 +156,12 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer7.isChecked()) {
-                    mScore = mScore + 1;
+                    if (answer7.getText() == "Cirrhosis of the liver") {
+                        mScore = mScore + 1;
+                    } else {
+                        mScore = mScore + 0;
+                    }
+
                 }
             }
         });
@@ -128,7 +170,11 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer8.isChecked()) {
-                    mScore = mScore + 1;
+                    if (answer8.getText() == "Diseases or conditions that make it harder to cough") {
+                        mScore = mScore + 1;
+                    } else {
+                        mScore = mScore + 0;
+                    }
                 }
             }
         });
@@ -138,7 +184,11 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer9.isChecked()) {
-                    mScore = mScore + 1;
+                    if (answer9.getText() == "Extreme obesity") {
+                        mScore = mScore + 1;
+                    } else {
+                        mScore = mScore + 0;
+                    }
                 }
             }
         });
@@ -148,7 +198,11 @@ public class DiagnosticQuiz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (answer10.isChecked()) {
-                    mScore = mScore + 1;
+                    if (answer10.getText() == "Pregnancy") {
+                        mScore = mScore + 1;
+                    } else {
+                        mScore = mScore + 0;
+                    }
                 }
             }
         });
