@@ -36,7 +36,15 @@ If the user wishes to clone the repository straight from Android Studio:
 **Interactive Map** <br/>
 * When starting up the app it will open to the "MAP SCREEN" tab.
 * Select the information you would like to see from the four floating action buttons on the left side. 
-![Interactive Map Floating Action Buttons](----)
+
+<p align="center">
+<img width="242" height="296" src=/images/MapFAB.png <br/>
+</p>
+
+<p align="center">
+<small>Interactive Map Floating Action Buttons</small>
+</p>
+
 * Scroll through the map of the world in order to visualize the magnitude of the spread in various countries.
 * Tap on the country or state you are interested in to obtain more detailed information about their cases. <br/>
 
