@@ -24,9 +24,12 @@ Using the Github Repository link a user can take the following steps to clone th
   * Afterwards, click "yes" when the "Checkout from Version Control" alert pops up.
   * Then, hit the "run" button in the upper right corner of the Android Studio user interface in order to run the app 
 ### Setup
-   * potential for someone in random OS to use it??
-   * Which OS did we use?
-   * Android Studio, SDK 22.2
+   * Operating Systems used: <br/>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   - Windows 10 <br/>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   - macOS Catalina v.10.15.4
+   * Software Development Kit Information: <br/>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   - Android Studio 3.6.3 <br/>
+   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * *Used Java as programming language*   
    * What else do they need to know to reproduce out results?
    
 ## Features
