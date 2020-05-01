@@ -1,4 +1,4 @@
-package com.example.covid_19visualizer.ui.main;
+package com.example.covid_19visualizer.info;
 
 //creating a class to store the details of every information tab from the CDC's RSS feed
 //created by Federico Coppo

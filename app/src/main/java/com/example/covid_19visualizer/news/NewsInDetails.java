@@ -1,22 +1,17 @@
-package com.example.covid_19visualizer;
+package com.example.covid_19visualizer.news;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.covid_19visualizer.ui.main.NewsFragment;
+import com.example.covid_19visualizer.R;
 import com.squareup.picasso.Picasso;
 
 public class NewsInDetails extends AppCompatActivity {
