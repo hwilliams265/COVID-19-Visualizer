@@ -15,7 +15,6 @@ import com.example.covid_19visualizer.R;
  * This class creates popup windows when a circle is pressed on map_fragment
  */
 public class RegionInfoPopup extends Activity {
-    private TextView text;
     String region;
     int confirmed;
     int active;
@@ -34,12 +33,12 @@ public class RegionInfoPopup extends Activity {
         this.deaths = intent.getIntExtra("DEATHS", -1);
 
         setContentView(R.layout.region_info_popup);
-        text = findViewById(R.id.regionInfoText);
+        TextView text = findViewById(R.id.regionInfoText);
 
         text.setText(getString(R.string.popup_display_text, region, confirmed, active, recovered,
          deaths));
 
-        ConstraintLayout layout = (ConstraintLayout) findViewById(R.id.regionInfoLayout);
+        ConstraintLayout layout = findViewById(R.id.regionInfoLayout);
         layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
