@@ -1,4 +1,4 @@
-package com.example.covid_19visualizer;
+package com.example.covid_19visualizer.news;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,7 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.covid_19visualizer.parameter.Articles;
+import com.example.covid_19visualizer.R;
+import com.example.covid_19visualizer.news.parameter.Articles;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;

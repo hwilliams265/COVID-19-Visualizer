@@ -1,4 +1,4 @@
-package com.example.covid_19visualizer;
+package com.example.covid_19visualizer.news;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

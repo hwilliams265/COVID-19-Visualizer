@@ -1,7 +1,6 @@
-package com.example.covid_19visualizer.parameter;
+package com.example.covid_19visualizer.news.parameter;
 
 import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 
 public class Source {
     @Expose

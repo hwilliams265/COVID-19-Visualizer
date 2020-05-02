@@ -1,7 +1,6 @@
-package com.example.covid_19visualizer.ui.main;
+package com.example.covid_19visualizer.news;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,20 +11,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.covid_19visualizer.Adapter;
-import com.example.covid_19visualizer.Client;
-import com.example.covid_19visualizer.NewsInDetails;
 import com.example.covid_19visualizer.R;
-import com.example.covid_19visualizer.parameter.Articles;
-import com.example.covid_19visualizer.parameter.Headlines;
-
-import org.jetbrains.annotations.NotNull;
+import com.example.covid_19visualizer.news.parameter.Articles;
+import com.example.covid_19visualizer.news.parameter.Headlines;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +78,7 @@ public class NewsFragment<floatingActionButton> extends Fragment {
         final String category = getCategory();
         fetchJSON(country,category,API_KEY);
 
+
     }
 
 
@@ -98,7 +91,7 @@ public class NewsFragment<floatingActionButton> extends Fragment {
                 {
                     articles.clear();
                     articles=response.body().getArticles();
-                    adapter =new Adapter(context, articles);
+                    adapter = new Adapter(context, articles);
                     recyclerView.setAdapter(adapter);
 
                 }
