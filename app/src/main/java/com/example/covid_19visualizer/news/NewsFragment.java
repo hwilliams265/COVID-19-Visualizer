@@ -72,7 +72,6 @@ public class NewsFragment<floatingActionButton> extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = view.findViewById(R.id.recycler);
-        refreshButton= view.findViewById(R.id.refresh);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         final String country = getCountry();
         final String category = getCategory();
